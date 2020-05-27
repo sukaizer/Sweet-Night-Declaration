@@ -6,6 +6,7 @@ pygame.init()
 
 game = Game()
 start = Menu(game)
+clock = pygame.time.Clock()
 
 # on set la fenetre
 pygame.display.set_caption("Sweet night declaration")
@@ -18,6 +19,7 @@ background = pygame.image.load('assets/background.png')
 while game.is_running:
 
     screen.blit(background, (0, 0))
+    clock.tick(60)
 
     if game.is_playing:
         game.update(screen)

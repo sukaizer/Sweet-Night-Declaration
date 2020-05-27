@@ -24,7 +24,7 @@ class Game:
         self.pressed = {}
 
     def update(self, screen):
-        self.stats.start_menu(screen)
+        self.stats.stat_menu(screen)
         screen.blit(self.player.image, self.player.rect)
 
         self.all_enemies.draw(screen)
