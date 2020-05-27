@@ -38,8 +38,6 @@ class Menu:
             elif event.type == self.SONG_END:
                 pygame.mixer.music.load('assets/music/menumusicrepeat.ogg')
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.load('assets/music/stage01start.ogg')
-                pygame.mixer.music.play(0)
 
     def menu_repeat_music(self):
         pygame.mixer.music.set_endevent(self.SONG_END)
