@@ -18,8 +18,6 @@ class Game:
         self.stats = Stats(self, self.player)
         self.is_running = True
         self.is_playing = False
-        self.all_players = pygame.sprite.Group()
-        self.all_players.add(self.player)
         self.all_enemies = pygame.sprite.Group()
         self.spawn_enemy()
         # dictionnaire contenant les touches pressées
