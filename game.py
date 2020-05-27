@@ -24,6 +24,8 @@ class Game:
         self.spawn_enemy()
         # dictionnaire contenant les touches pressées
         self.pressed = {}
+        self.time_bullet = 0
+        self.wait_bullet_time = 2
 
     def update(self, screen, start):
         self.stats.stat_menu(screen)
@@ -78,7 +80,7 @@ class Game:
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(Enemy(self))
+        self.all_enemies.add(Enemy(self, 50, 50, Pattern(self, 50,50)))
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)  # change hitbox
