@@ -19,7 +19,7 @@ class Bullet(pygame.sprite.Sprite):
     def move(self):
         self.rect.y -= self.velocity
 
-        for enemies in self.game.check_collision(self, self.game.all_enemies ):
+        for enemies in self.game.check_collision(self, self.game.all_enemies):
             self.remove()
             enemies.damage(self.player.attack)
 
