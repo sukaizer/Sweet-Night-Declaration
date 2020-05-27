@@ -1,3 +1,4 @@
+import sys
 import pygame
 from game import *
 from start_menu import *
@@ -33,6 +34,7 @@ while game.is_running:
         if event.type == pygame.QUIT:
             isRunning = False
             pygame.quit()
+            sys.exit()
         # détection de pression d'une touche
         elif event.type == pygame.KEYDOWN:
             game.pressed[event.key] = True
