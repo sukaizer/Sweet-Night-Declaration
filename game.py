@@ -9,6 +9,7 @@ class Game:
     def __init__(self):
         """Constructeur de classe"""
 
+        self.is_running = True
         self.is_playing = False
         self.width = 1080
         self.real_width = 4 * self.width / 6  # the main game screen = 900
