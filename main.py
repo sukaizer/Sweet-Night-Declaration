@@ -16,6 +16,11 @@ screen = pygame.display.set_mode((game.width, game.height))
 background = pygame.image.load('assets/background.png')
 
 stats = pygame.image.load('assets/Stats.png')
+start = pygame.image.load('assets/ngnl.jpg')
+start = pygame.transform.scale(start, (200, 200))
+start_rect = start.get_rect()
+start_rect.x = game.width/2
+start_rect.y = game.height/2
 
 isRunning = True
 
@@ -23,36 +28,11 @@ isRunning = True
 while isRunning:
 
     screen.blit(background, (0, 0))
-    screen.blit(stats, (game.real_width, 0))
 
-    screen.blit(game.player.image, game.player.rect)
-
-    game.all_enemies.draw(screen)
-    game.player.all_bullets.draw(screen)
-
-    clock.tick(75)
-
-    for enemies in game.all_enemies:
-        enemies.simple_move()
-
-    for bullets in game.player.all_bullets:
-        bullets.move()
-
-    # verif des deplacements
-    if game.pressed.get(pygame.K_RIGHT) and game.player.rect.x + game.player.rect.width * 1.2 < game.real_width:
-        game.player.move_right()
-    elif game.pressed.get(pygame.K_LEFT) and game.player.rect.x > 0:
-        game.player.move_left()
-    if game.pressed.get(pygame.K_UP) and game.player.rect.y > 0:
-        game.player.move_up()
-    elif game.pressed.get(pygame.K_DOWN) and game.player.rect.y + game.player.rect.height < game.height:
-        game.player.move_down()
-
-    if game.pressed.get(pygame.K_SPACE):
-        bullet_clock.tick()
-        # ralentir le nombre de balles
-        if bullet_clock.get_time() > 5:  # TODO
-            game.player.shoot()
+    if game.is_playing:
+        game.update(screen, stats)
+    else:
+        screen.blit(start, start_rect)
 
     pygame.display.flip()
 
@@ -74,3 +54,6 @@ while isRunning:
 
             if event.key == pygame.K_q:
                 game.player.normal_velocity()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if start_rect.collidepoint(event.pos):
+                game.is_playing = True
