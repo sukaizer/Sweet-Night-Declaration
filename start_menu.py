@@ -25,6 +25,21 @@ class Menu:
     def start_menu(self, screen):
         screen.blit(self.start, self.start_rect)
         screen.blit(self.title, self.title_rect)
+        for event in pygame.event.get():
+            # detection de la fermeture de la fenetre
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            # détection de pression d'une touche
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.start_rect.collidepoint(event.pos):
+                    self.game.is_playing = True
+                    pygame.mixer.music.stop()
+            elif event.type == self.SONG_END:
+                pygame.mixer.music.load('assets/music/menumusicrepeat.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.load('assets/music/stage01start.ogg')
+                pygame.mixer.music.play(0)
 
     def menu_repeat_music(self):
         pygame.mixer.music.set_endevent(self.SONG_END)

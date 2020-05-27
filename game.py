@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from player import *
 from enemy import *
@@ -23,7 +25,7 @@ class Game:
         # dictionnaire contenant les touches pressées
         self.pressed = {}
 
-    def update(self, screen):
+    def update(self, screen, start):
         self.stats.stat_menu(screen)
         screen.blit(self.player.image, self.player.rect)
 
@@ -49,6 +51,29 @@ class Game:
         if self.pressed.get(pygame.K_SPACE):
             # ralentir le nombre de balles
             self.player.shoot()
+
+        for event in pygame.event.get():
+            # detection de la fermeture de la fenetre
+            if event.type == pygame.QUIT:
+                isRunning = False
+                pygame.quit()
+                sys.exit()
+            # détection de pression d'une touche
+            elif event.type == pygame.KEYDOWN:
+                self.pressed[event.key] = True
+                if event.key == pygame.K_q:
+                    self.player.slow_player()
+            # si on lache une touche
+            elif event.type == pygame.KEYUP:
+                self.pressed[event.key] = False
+                if event.key == pygame.K_q:
+                    self.player.normal_velocity()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if start.start_rect.collidepoint(event.pos):
+                    self.is_playing = True
+            elif event.type == start.SONG_END:
+                pygame.mixer.music.load('assets/music/stage01repeat.ogg')
+                pygame.mixer.music.play(-1)
 
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
