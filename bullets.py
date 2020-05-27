@@ -10,7 +10,7 @@ class Bullet(pygame.sprite.Sprite):
         self.velocity = 45
         self.image = pygame.image.load("assets/bullet.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = player.rect.x + player.rect.width / 2
+        self.rect.x = player.rect.x + player.rect.width / 2 - self.rect.width/2
         self.rect.y = player.rect.y - 5
 
     def remove(self):
