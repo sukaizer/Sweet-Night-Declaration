@@ -55,7 +55,6 @@ class Game:
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
             if event.type == pygame.QUIT:
-                isRunning = False
                 pygame.quit()
                 sys.exit()
             # détection de pression d'une touche
