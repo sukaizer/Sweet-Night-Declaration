@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.max_velocity = 10  # pixels
         self.velocity = 10
         self.all_bullets = pygame.sprite.Group()
-        self.image = pygame.image.load('assets/player.png')
+        self.image = pygame.image.load('assets/player.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2

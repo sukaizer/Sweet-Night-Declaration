@@ -5,16 +5,19 @@ from start_menu import *
 
 pygame.init()
 
+width = 1080
+height = 980
+
+# on set la fenetre
+pygame.display.set_caption("Sweet night declaration")
+screen = pygame.display.set_mode((width, height))
+
 game = Game()
 start = Menu(game)
 clock = pygame.time.Clock()
 
-# on set la fenetre
-pygame.display.set_caption("Sweet night declaration")
-screen = pygame.display.set_mode((game.width, game.height))
-
 # image du background
-background = pygame.image.load('assets/background.png')
+background = pygame.image.load('assets/background.png').convert_alpha()
 
 # boucle principale
 while game.is_running:

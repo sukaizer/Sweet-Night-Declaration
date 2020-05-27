@@ -6,8 +6,8 @@ class Stats:
     def __init__(self, game, player):
         self.player = player
         self.game = game
-        self.stats = pygame.image.load('assets/Stats.png')
-        self.lp = pygame.image.load('assets/player.png')
+        self.stats = pygame.image.load('assets/Stats.png').convert_alpha()
+        self.lp = pygame.image.load('assets/player.png').convert_alpha()
         self.lp = pygame.transform.scale(self.lp, (40, 40))
         self.lp_rect1 = self.lp.get_rect()
         self.lp_rect2 = self.lp.get_rect()

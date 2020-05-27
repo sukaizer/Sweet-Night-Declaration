@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 100
         self.max_health = 100
         self.velocity = random.randint(3, 9)
-        self.image = pygame.image.load("assets/enemy1.png")
+        self.image = pygame.image.load("assets/enemy1.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(self.rect.width, self.game.real_width - self.rect.width)
         self.rect.y = 50
