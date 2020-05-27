@@ -72,9 +72,6 @@ class Game:
                 self.pressed[event.key] = False
                 if event.key == pygame.K_q:
                     self.player.normal_velocity()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if start.start_rect.collidepoint(event.pos):
-                    self.is_playing = True
             elif event.type == start.SONG_END:
                 pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                 pygame.mixer.music.play(-1)
