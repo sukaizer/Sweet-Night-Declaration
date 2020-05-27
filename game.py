@@ -60,6 +60,7 @@ class Game:
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
             if event.type == pygame.QUIT:
+                isRunning = False
                 pygame.quit()
                 sys.exit()
             # détection de pression d'une touche
@@ -82,7 +83,7 @@ class Game:
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(Enemy(self, 50, 50, Pattern(self, 50,50)))
+        self.all_enemies.add(Enemy(self, 50, 50))
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)  # change hitbox
