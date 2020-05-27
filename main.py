@@ -14,15 +14,13 @@ screen = pygame.display.set_mode((game.width, game.height))
 # image du background
 background = pygame.image.load('assets/background.png')
 
-stats = pygame.image.load('assets/Stats.png')
-
 # boucle principale
 while game.is_running:
 
     screen.blit(background, (0, 0))
 
     if game.is_playing:
-        game.update(screen, stats)
+        game.update(screen)
     else:
         start.start_menu(screen)
 

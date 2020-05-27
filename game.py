@@ -1,6 +1,7 @@
 import pygame
 from player import *
 from enemy import *
+from statistiques import *
 
 
 class Game:
@@ -8,13 +9,13 @@ class Game:
 
     def __init__(self):
         """Constructeur de classe"""
-
-        self.is_running = True
-        self.is_playing = False
         self.width = 1080
         self.real_width = 4 * self.width / 6  # the main game screen = 900
         self.height = 980
         self.player = Player(self)
+        self.stats = Stats(self, self.player)
+        self.is_running = True
+        self.is_playing = False
         self.all_players = pygame.sprite.Group()
         self.all_players.add(self.player)
         self.all_enemies = pygame.sprite.Group()
@@ -22,9 +23,8 @@ class Game:
         # dictionnaire contenant les touches pressées
         self.pressed = {}
 
-    def update(self, screen, stats):
-        screen.blit(stats, (self.real_width, 0))
-
+    def update(self, screen):
+        self.stats.start_menu(screen)
         screen.blit(self.player.image, self.player.rect)
 
         self.all_enemies.draw(screen)

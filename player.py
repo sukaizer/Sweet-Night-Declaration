@@ -11,6 +11,7 @@ class Player(pygame.sprite.Sprite):
 
         super().__init__()
         self.game = game
+        self.nb_bomb = 0
         self.health = 3
         self.max_health = 3
         self.attack = 5

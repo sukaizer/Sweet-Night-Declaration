@@ -23,4 +23,4 @@ class Menu:
 
     def start_menu(self, screen):
         screen.blit(self.start, self.start_rect)
-        screen.blit(self.title,self.title_rect)
+        screen.blit(self.title, self.title_rect)
