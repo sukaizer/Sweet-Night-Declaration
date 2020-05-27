@@ -28,6 +28,8 @@ class Game:
         self.wait_bullet_time = 2
 
     def update(self, screen, start):
+        self.time_bullet += 1
+        print(self.time_bullet)
         self.stats.stat_menu(screen)
         screen.blit(self.player.image, self.player.rect)
 
@@ -50,9 +52,10 @@ class Game:
         elif self.pressed.get(pygame.K_DOWN) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
-        if self.pressed.get(pygame.K_SPACE):
+        if self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
             # ralentir le nombre de balles
             self.player.shoot()
+            self.time_bullet = 0
 
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
