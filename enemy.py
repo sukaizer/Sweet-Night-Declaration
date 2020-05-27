@@ -5,7 +5,7 @@ import random
 class Enemy(pygame.sprite.Sprite):
     """Classe représentant les ennemis"""
 
-    def __init__(self, game):
+    def __init__(self, game, x, y, pattern):
         """Constructeur de classe"""
 
         super().__init__()
@@ -15,9 +15,10 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = random.randint(3, 9)
         self.image = pygame.image.load("assets/enemy1.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(self.rect.width, self.game.real_width - self.rect.width)
-        self.rect.y = 50
+        self.rect.x = x
+        self.rect.y = y
         self.left_to_right = bool(random.getrandbits(1))
+        self.pattern = pattern
 
     def remove(self):
         """Enlève l'ennemi (self) du groupe d'ennemis"""
@@ -41,3 +42,6 @@ class Enemy(pygame.sprite.Sprite):
         self.health -= amount
         if self.health <= 0:
             self.remove()
+
+    def read_pattern(self):
+        self.x, self.y = self.pattern.move()
