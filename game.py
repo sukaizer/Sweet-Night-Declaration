@@ -33,7 +33,6 @@ class Game:
         self.stats.stat_menu(screen)
         screen.blit(self.player.image, self.player.rect)
 
-
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
 
