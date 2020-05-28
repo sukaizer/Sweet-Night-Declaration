@@ -19,9 +19,21 @@ class Stats:
         self.lp_rect2.y = self.game.height / 2
         self.lp_rect3.y = self.game.height / 2
 
+        self.bomb = pygame.image.load('assets/bomb.png').convert_alpha()
+        self.bomb1 = self.bomb.get_rect()
+        self.bomb2 = self.bomb.get_rect()
+        self.bomb3 = self.bomb.get_rect()
+        self.bomb1.x = self.game.real_width + 10
+        self.bomb2.x = self.game.real_width + (self.game.width - self.game.real_width) / 2 - self.lp_rect2.width / 2
+        self.bomb3.x = self.game.width - (10 + self.lp_rect3.width)
+        self.bomb1.y = 2 * self.game.height / 3
+        self.bomb2.y = 2 * self.game.height / 3
+        self.bomb3.y = 2 * self.game.height / 3
+
     def stat_menu(self, screen):
         screen.blit(self.stats, (self.game.real_width, 0))
         self.life_points(screen)
+        self.bombs(screen)
 
     def life_points(self, screen):
         if self.player.health == 3:
@@ -33,3 +45,14 @@ class Stats:
             screen.blit(self.lp, self.lp_rect2)
         else:
             screen.blit(self.lp, self.lp_rect1)
+
+    def bombs(self, screen):
+        if self.player.nb_bomb == 3:
+            screen.blit(self.bomb, self.bomb1)
+            screen.blit(self.bomb, self.bomb2)
+            screen.blit(self.bomb, self.bomb3)
+        elif self.player.nb_bomb == 2:
+            screen.blit(self.bomb, self.bomb1)
+            screen.blit(self.bomb, self.bomb2)
+        else:
+            screen.blit(self.bomb, self.bomb1)
