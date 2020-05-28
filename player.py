@@ -19,6 +19,15 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 10
         self.all_bullets = pygame.sprite.Group()
         self.image = pygame.image.load('assets/playerv2.png').convert_alpha()
+        self.walkRight = [pygame.image.load('assets/animated_sprites/d1.png'), pygame.image.load('assets/animated_sprites/d2.png'), pygame.image.load('assets/animated_sprites/d3.png'),
+                     pygame.image.load('assets/animated_sprites/d4.png'), pygame.image.load('assets/animated_sprites/d5.png'), pygame.image.load('assets/animated_sprites/d6.png'),
+                     pygame.image.load('assets/animated_sprites/d7.png'), pygame.image.load('assets/animated_sprites/d8.png')]
+        self.walkLeft = [pygame.image.load('assets/animated_sprites/g1.png'), pygame.image.load('assets/animated_sprites/g2.png'), pygame.image.load('assets/animated_sprites/g3.png'),
+                    pygame.image.load('assets/animated_sprites/g4.png'), pygame.image.load('assets/animated_sprites/g5.png'), pygame.image.load('assets/animated_sprites/g6.png'),
+                    pygame.image.load('assets/animated_sprites/g7.png'), pygame.image.load('assets/animated_sprites/g8.png')]
+        self.standing = [pygame.image.load('assets/animated_sprites/m1.png'), pygame.image.load('assets/animated_sprites/m2.png'), pygame.image.load('assets/animated_sprites/m3.png'),
+                    pygame.image.load('assets/animated_sprites/m4.png'), pygame.image.load('assets/animated_sprites/m5.png'), pygame.image.load('assets/animated_sprites/m6.png'),
+                    pygame.image.load('assets/animated_sprites/m7.png'), pygame.image.load('assets/animated_sprites/m8.png')]
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
