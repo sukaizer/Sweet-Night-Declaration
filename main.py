@@ -1,7 +1,7 @@
 import sys
 import pygame
-from game import *
-from start_menu import *
+from Game import *
+from Start_menu import *
 
 pygame.init()
 
@@ -13,7 +13,7 @@ pygame.display.set_caption("Sweet night declaration")
 screen = pygame.display.set_mode((width, height))
 
 game = Game()
-start = Menu(game)
+start = Start_menu(game)
 clock = pygame.time.Clock()
 
 # image du background

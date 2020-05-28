@@ -1,9 +1,9 @@
 import sys
 
 import pygame
-from player import *
-from enemy import *
-from statistiques import *
+from Player import *
+from Enemy import *
+from Stats import *
 
 
 class Game:
