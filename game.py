@@ -24,13 +24,26 @@ class Game:
         self.pressed = {}
         self.time_bullet = 0
         self.wait_bullet_time = 2
+        self.left = False
+        self.right = False
+        self.walkCount = 0
 
     def update(self, screen, start):
         self.time_bullet += 1
         print(self.time_bullet)
         self.stats.stat_menu(screen)
-        screen.blit(self.player.image, self.player.rect)
+        if self.walkCount >= 24 :
+            self.walkCount = 0
 
+        if self.left:
+            screen.blit(self.player.walkLeft[self.walkCount//3], self.player.rect)
+            self.walkCount += 1
+        elif self.right:
+            screen.blit(self.player.walkRight[self.walkCount//3], self.player.rect)
+            self.walkCount += 1
+        else:
+            screen.blit(self.player.standing[self.walkCount//3], self.player.rect)
+            self.walkCount += 1
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
 
@@ -44,8 +57,15 @@ class Game:
 
         if self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
+            self.left = False
+            self.right = True
         elif self.pressed.get(pygame.K_LEFT) and not self.pressed.get(pygame.K_RIGHT) and self.player.rect.x > 0:
             self.player.move_left()
+            self.left = True
+            self.right = False
+        else:
+            self.left = False
+            self.right = False
         if self.pressed.get(pygame.K_UP) and not self.pressed.get(pygame.K_DOWN) and self.player.rect.y > 0:
             self.player.move_up()
         elif self.pressed.get(pygame.K_DOWN) and not self.pressed.get(pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
