@@ -27,22 +27,26 @@ class Game:
         self.left = False
         self.right = False
         self.walkCount = 0
+        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
+        self.hitSound.set_volume(0.05)
+
 
     def update(self, screen, start):
         self.time_bullet += 1
         print(self.time_bullet)
         self.stats.stat_menu(screen)
-        if self.walkCount >= 24 :
+        if self.walkCount >= 5*8 :
             self.walkCount = 0
 
         if self.left:
-            screen.blit(self.player.walkLeft[self.walkCount//3], self.player.rect)
+            screen.blit(self.player.walkLeft[self.walkCount//5], self.player.rect)
             self.walkCount += 1
         elif self.right:
-            screen.blit(self.player.walkRight[self.walkCount//3], self.player.rect)
+            screen.blit(self.player.walkRight[self.walkCount//5], self.player.rect)
             self.walkCount += 1
         else:
-            screen.blit(self.player.standing[self.walkCount//3], self.player.rect)
+            screen.blit(self.player.standing[self.walkCount//5], self.player.rect)
             self.walkCount += 1
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
@@ -72,6 +76,7 @@ class Game:
             self.player.move_down()
 
         if self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
+            self.bulletSound.play()
             # ralentir le nombre de balles
             self.player.shoot()
             self.time_bullet = 0
