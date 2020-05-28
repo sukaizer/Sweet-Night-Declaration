@@ -19,6 +19,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = 50
         self.left_to_right = bool(random.getrandbits(1))
 
+
     def remove(self):
         """Enlève l'ennemi (self) du groupe d'ennemis"""
         self.game.all_enemies.remove(self)
@@ -38,6 +39,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.left_to_right = True
 
     def damage(self, amount):
+        self.game.hitSound.play()
         self.health -= amount
         if self.health <= 0:
             self.remove()
