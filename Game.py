@@ -1,5 +1,6 @@
 import sys
 
+import numpy
 import pygame
 from Player import *
 from Enemy import *
@@ -12,7 +13,7 @@ class Game:
     def __init__(self):
         """Constructeur de classe"""
         self.width = 1080
-        self.real_width = 4 * self.width / 6  # the main game screen = 900
+        self.real_width = 2 * self.width / 3  # the main game screen = 900
         self.height = 980
         self.player = Player(self)  # instance de joueur
         self.stats = Stats(self, self.player)  # affichage des statistiques de partie
@@ -22,6 +23,7 @@ class Game:
         self.all_enemies = pygame.sprite.Group()  # groupe comprenant les ennemis
         self.pressed = {}  # dictionnaire contenant les touches pressées
 
+        self.is_slow = False
         # Variables de temps
 
         self.time_bullet = 0
@@ -84,6 +86,11 @@ class Game:
                 screen.blit(self.player.standing[self.walkCount // self.number_frames], self.player.rect)
                 self.walkCount += 1
 
+        if self.is_slow:
+            pygame.draw.circle(screen, (255, 0, 0, 0.1), (
+            self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
+                               self.player.hitbox + 3)
+
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
 
@@ -143,6 +150,7 @@ class Game:
                 self.pressed[event.key] = True
                 if not self.is_paused and event.key == pygame.K_q:
                     self.player.slow_player()
+                    self.is_slow = True
                 if not self.is_paused and event.key == pygame.K_ESCAPE:
                     self.is_paused = True
                 elif self.is_paused and event.key == pygame.K_ESCAPE:
@@ -152,6 +160,7 @@ class Game:
                 self.pressed[event.key] = False
                 if not self.is_paused and event.key == pygame.K_q:
                     self.player.normal_velocity()
+                    self.is_slow = False
             elif event.type == self.SONG_END:
                 pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                 pygame.mixer.music.play(-1)
@@ -162,7 +171,32 @@ class Game:
         self.all_enemies.add(Enemy(self))
 
     def check_collision(self, sprite, group):
-        return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)  # change hitbox
+        return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)
+
+    def check_collision_player(self, group):
+        cx = self.player.rect.x + self.player.rect.width / 2
+        cy = self.player.rect.y + self.player.rect.height / 2
+        for enemy in group:
+            x = enemy.rect.x
+            y = enemy.rect.y
+            w = enemy.rect.width
+            h = enemy.rect.height
+            testX = cx
+            testY = cy
+            if cx < x:
+                testX = x
+            elif cx > x + w:
+                testX = x + w
+            if cy < y:
+                testX = y
+            elif cy > y + h:
+                testX = y + h
+            distX = cx - testX
+            distY = cy - testY
+            distance = numpy.sqrt((distX * distX) + (distY * distY))
+            if distance <= self.player.hitbox:
+                return True
+        return False
 
     def new_game(self):
         self.player = Player(self)
