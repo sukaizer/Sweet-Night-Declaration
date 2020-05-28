@@ -46,7 +46,6 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
-        self.direction = {}
 
     def shoot(self):
         self.all_bullets.add(Bullet(self, self.game))
@@ -87,3 +86,7 @@ class Player(pygame.sprite.Sprite):
             return True
         else:
             return False
+
+    def place_player(self):
+        self.rect.x = self.game.real_width / 2
+        self.rect.y = self.game.height / 2

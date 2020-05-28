@@ -2,6 +2,7 @@ import sys
 import pygame
 from Game import *
 from Start_menu import *
+from End_menu import *
 
 pygame.init()
 
@@ -15,9 +16,10 @@ screen = pygame.display.set_mode((width, height))
 game = Game()
 start = Start_menu(game)
 clock = pygame.time.Clock()
+end = End_menu(game)
 
 # image du background
-background = pygame.image.load('assets/background.png').convert_alpha()
+background = pygame.image.load('assets/background/background.png').convert_alpha()
 
 # boucle principale
 while game.is_running:
@@ -26,9 +28,12 @@ while game.is_running:
     clock.tick(60)
 
     # boucle de jeu
-    if game.is_playing:
-        game.update(screen, start)
+    if game.is_playing and not game.is_dead:
+        game.update(screen)
     # boucle du menu
-    else:
+    elif not game.is_playing and not game.is_dead:
         start.start_menu(screen)
+    else:
+        end.end_menu(screen)
+
     pygame.display.flip()

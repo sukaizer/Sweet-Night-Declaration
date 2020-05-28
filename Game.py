@@ -18,8 +18,8 @@ class Game:
         self.stats = Stats(self, self.player)
         self.is_running = True
         self.is_playing = False
+        self.is_dead = False
         self.all_enemies = pygame.sprite.Group()
-        self.spawn_enemy()
         # dictionnaire contenant les touches pressées
         self.pressed = {}
         self.time_bullet = 0
@@ -35,12 +35,13 @@ class Game:
         self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
+        self.SONG_END = pygame.USEREVENT + 1
 
-    def update(self, screen, start):
+    def update(self, screen):
         self.time_bullet += 1
         self.time_collision += 1
         self.stats.stat_menu(screen)
-        
+
         if self.walkCount >= self.number_frames * len(self.player.walkLeft):
             self.walkCount = 0
 
@@ -109,6 +110,9 @@ class Game:
             if self.player.check_player_collision():  # collision du personnage
                 self.time_collision = 0
                 self.is_immune = True
+                if self.player.health == 0:
+                    self.is_dead = True
+                    self.is_playing = False
 
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
@@ -125,7 +129,7 @@ class Game:
                 self.pressed[event.key] = False
                 if event.key == pygame.K_q:
                     self.player.normal_velocity()
-            elif event.type == start.SONG_END:
+            elif event.type == self.SONG_END:
                 pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                 pygame.mixer.music.play(-1)
 
@@ -136,3 +140,23 @@ class Game:
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)  # change hitbox
+
+    def new_game(self):
+        self.player = Player(self)
+        self.stats = Stats(self, self.player)
+        self.all_enemies = pygame.sprite.Group()
+        self.spawn_enemy()
+        self.pressed = {}
+        self.time_bullet = 0
+        self.wait_bullet_time = 2
+        self.time_collision = 120
+        self.wait_collision_time = self.time_collision
+        self.is_immune = False
+        self.immune_count = 0
+        self.left = False
+        self.right = False
+        self.walkCount = 0
+        self.number_frames = 5  # toutes les 2 frames, une animation
+        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
+        self.hitSound.set_volume(0.05)
