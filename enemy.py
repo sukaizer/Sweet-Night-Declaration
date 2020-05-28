@@ -1,5 +1,6 @@
 import pygame
 import random
+from enemybullet import *
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -42,4 +43,9 @@ class Enemy(pygame.sprite.Sprite):
         self.health -= amount
         if self.health <= 0:
             self.remove()
+
+
+    def create_bullet(self, x, y, angle, v, asset):
+        self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))
+    
 
