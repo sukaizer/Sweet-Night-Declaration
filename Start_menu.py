@@ -1,9 +1,9 @@
 import pygame
-from player import *
-from enemy import *
+from Player import *
+from Enemy import *
 
 
-class Menu:
+class Start_menu:
     """Classe qui représente le menu d'accueil du jeu"""
 
     def __init__(self, game):
