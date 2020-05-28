@@ -33,6 +33,7 @@ class End_menu:
         if not self.music_is_playing:
             pygame.mixer.music.load('assets/music/deathscreenv2.ogg')
             pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(0.3)
             self.music_is_playing = True
         self.game.all_enemies.empty()
         screen.blit(self.restart, self.restart_rect)
@@ -48,9 +49,11 @@ class End_menu:
                 if self.restart_rect.collidepoint(event.pos):
                     self.game.is_playing = True
                     self.game.is_dead = False
+                    self.music_is_playing = False
                     pygame.mixer.music.stop()
                     self.game.new_game()
                 if self.menu_rect.collidepoint(event.pos):
                     self.game.is_playing = False
                     self.game.is_dead = False
+                    self.music_is_playing = False
                     pygame.mixer.music.stop()
