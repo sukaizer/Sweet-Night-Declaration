@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
-        self.hitbox = self.rect.width // 5  # rayon
+        self.hitbox = self.rect.width // 6  # rayon
 
     def shoot(self):
         self.all_bullets.add(Bullet(self, self.game))
