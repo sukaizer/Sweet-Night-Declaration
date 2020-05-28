@@ -10,7 +10,7 @@ width = 1080
 height = 980
 
 # on set la fenetre
-pygame.display.set_caption("Sweet night declaration")
+pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
 
 game = Game()

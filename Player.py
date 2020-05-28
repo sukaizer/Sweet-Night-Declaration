@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
+        self.hitbox = self.rect.width // 5  # rayon
 
     def shoot(self):
         self.all_bullets.add(Bullet(self, self.game))
@@ -73,7 +74,7 @@ class Player(pygame.sprite.Sprite):
     def slow_player(self):
         """Ralentit le joueur pour permettre plus de précision"""
 
-        self.velocity = 5
+        self.velocity = 4
 
     def normal_velocity(self):
         """Redonne au joueur sa vitesse de base"""
@@ -81,7 +82,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = self.max_velocity
 
     def check_player_collision(self):
-        if self.game.check_collision(self, self.game.all_enemies):
+        if self.game.check_collision_player(self.game.all_enemies):
             self.health -= 1
             return True
         else:
