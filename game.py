@@ -32,11 +32,15 @@ class Game:
         self.right = False
         self.walkCount = 0
         self.number_frames = 5  # toutes les 2 frames, une animation
+        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
+        self.hitSound.set_volume(0.05)
 
     def update(self, screen, start):
         self.time_bullet += 1
         self.time_collision += 1
         self.stats.stat_menu(screen)
+        
         if self.walkCount >= self.number_frames * len(self.player.walkLeft):
             self.walkCount = 0
 
@@ -93,6 +97,7 @@ class Game:
             self.player.move_down()
 
         if self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
+            self.bulletSound.play()
             # ralentir le nombre de balles
             self.player.shoot()
             self.time_bullet = 0
