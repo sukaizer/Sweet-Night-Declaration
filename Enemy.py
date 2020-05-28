@@ -15,10 +15,9 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = random.randint(3, 9)
         self.image = pygame.image.load("assets/enemies/enemy1.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(self.rect.width, self.game.real_width - self.rect.width)
+        self.rect.x = random.randint(0, 50)
         self.rect.y = 50
         self.left_to_right = bool(random.getrandbits(1))
-
 
     def remove(self):
         """Enlève l'ennemi (self) du groupe d'ennemis"""

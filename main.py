@@ -6,7 +6,7 @@ from End_menu import *
 
 pygame.init()
 
-width = 1080
+width = 1200
 height = 980
 
 # on set la fenetre
@@ -20,6 +20,7 @@ end = End_menu(game)
 
 # image du background
 background = pygame.image.load('assets/background/background.png').convert_alpha()
+background = pygame.transform.scale(background, (1200, 980))
 
 # boucle principale
 while game.is_running:

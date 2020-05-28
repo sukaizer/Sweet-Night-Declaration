@@ -12,7 +12,7 @@ class Game:
 
     def __init__(self):
         """Constructeur de classe"""
-        self.width = 1080
+        self.width = 1200
         self.real_width = 2 * self.width / 3  # the main game screen = 900
         self.height = 980
         self.player = Player(self)  # instance de joueur
@@ -47,8 +47,8 @@ class Game:
         self.SONG_END = pygame.USEREVENT + 1  # event de fin de musique
         self.pause = pygame.image.load('assets/title/pause.png').convert_alpha()
         self.pause_rect = self.pause.get_rect()  # image de pause
-        self.pause_rect.x = self.width / 2 - self.pause_rect.width / 2
-        self.pause_rect.y = self.height / 2
+        self.pause_rect.x = self.width / 2 - 2*self.pause_rect.width / 3
+        self.pause_rect.y = self.height / 2 - self.pause_rect.height/2
         self.is_paused = False
 
     def update(self, screen):
@@ -89,7 +89,7 @@ class Game:
         if self.is_slow:
             pygame.draw.circle(screen, (255, 0, 0, 0.1), (
             self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
-                               self.player.hitbox + 3)
+                               self.player.hitbox + 6)
 
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
@@ -188,12 +188,14 @@ class Game:
             elif cx > x + w:
                 testX = x + w
             if cy < y:
-                testX = y
+                testY = y
             elif cy > y + h:
-                testX = y + h
+                testY = y + h
             distX = cx - testX
             distY = cy - testY
             distance = numpy.sqrt((distX * distX) + (distY * distY))
+            print("distance", distance)
+            print("rayon", self.player.hitbox)
             if distance <= self.player.hitbox:
                 return True
         return False
@@ -217,3 +219,4 @@ class Game:
         self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
+        self.is_slow = False
