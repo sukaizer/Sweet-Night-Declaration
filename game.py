@@ -66,7 +66,6 @@ class Game:
         else:
             self.left = False
             self.right = False
-
         if self.pressed.get(pygame.K_UP) and not self.pressed.get(pygame.K_DOWN) and self.player.rect.y > 0:
             self.player.move_up()
         elif self.pressed.get(pygame.K_DOWN) and not self.pressed.get(pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
