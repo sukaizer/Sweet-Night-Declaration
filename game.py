@@ -24,26 +24,45 @@ class Game:
         self.pressed = {}
         self.time_bullet = 0
         self.wait_bullet_time = 2
+        self.time_collision = 120
+        self.wait_collision_time = self.time_collision
+        self.is_immune = False
+        self.immune_count = 0
         self.left = False
         self.right = False
         self.walkCount = 0
+        self.number_frames = 5  # toutes les 2 frames, une animation
 
     def update(self, screen, start):
         self.time_bullet += 1
-        print(self.time_bullet)
+        self.time_collision += 1
         self.stats.stat_menu(screen)
-        if self.walkCount >= 24 :
+        if self.walkCount >= self.number_frames * len(self.player.walkLeft):
             self.walkCount = 0
 
-        if self.left:
-            screen.blit(self.player.walkLeft[self.walkCount//3], self.player.rect)
-            self.walkCount += 1
-        elif self.right:
-            screen.blit(self.player.walkRight[self.walkCount//3], self.player.rect)
-            self.walkCount += 1
+        if self.is_immune:
+            self.immune_count += 1
+            if self.immune_count % 2 == 0:
+                if self.left:
+                    screen.blit(self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
+                    self.walkCount += 1
+                elif self.right:
+                    screen.blit(self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
+                    self.walkCount += 1
+                else:
+                    screen.blit(self.player.standing[self.walkCount // self.number_frames], self.player.rect)
+                    self.walkCount += 1
         else:
-            screen.blit(self.player.standing[self.walkCount//3], self.player.rect)
-            self.walkCount += 1
+            if self.left:
+                screen.blit(self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
+                self.walkCount += 1
+            elif self.right:
+                screen.blit(self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
+                self.walkCount += 1
+            else:
+                screen.blit(self.player.standing[self.walkCount // self.number_frames], self.player.rect)
+                self.walkCount += 1
+
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
 
@@ -55,7 +74,8 @@ class Game:
 
         # verif des deplacements
 
-        if self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+        if self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
+                pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
             self.left = False
             self.right = True
@@ -68,13 +88,22 @@ class Game:
             self.right = False
         if self.pressed.get(pygame.K_UP) and not self.pressed.get(pygame.K_DOWN) and self.player.rect.y > 0:
             self.player.move_up()
-        elif self.pressed.get(pygame.K_DOWN) and not self.pressed.get(pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
+        elif self.pressed.get(pygame.K_DOWN) and not self.pressed.get(
+                pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
         if self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
             # ralentir le nombre de balles
             self.player.shoot()
             self.time_bullet = 0
+
+        if self.time_collision > self.wait_collision_time:
+            self.is_immune = False
+
+        if not self.is_immune:
+            if self.player.check_player_collision():  # collision du personnage
+                self.time_collision = 0
+                self.is_immune = True
 
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
