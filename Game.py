@@ -50,6 +50,7 @@ class Game:
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
         self.SONG_END = pygame.USEREVENT + 1  # event de fin de musique
+        self.song_played = False
         self.pause = pygame.image.load('assets/title/pause.png').convert_alpha()
         self.pause_rect = self.pause.get_rect()  # image de pause
         self.pause_rect.x = self.width / 2 - 2 * self.pause_rect.width / 3
@@ -108,7 +109,8 @@ class Game:
         if not self.is_paused:
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 20, 6,
+                if self.time % 10 == 0:
+                    enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 6,
                                       'assets/enemies/knofe.png')
 
             for bullets in self.player.all_bullets:
@@ -177,8 +179,13 @@ class Game:
                     self.player.normal_velocity()
                     self.is_slow = False
             elif event.type == self.SONG_END:
-                pygame.mixer.music.load('assets/music/stage01repeat.ogg')
-                pygame.mixer.music.play(-1)
+                if not self.song_played:
+                    pygame.mixer.music.load('assets/music/stage01start.ogg')
+                    pygame.mixer.music.play(1)
+                    self.song_played = True
+                else:
+                    pygame.mixer.music.load('assets/music/stage01repeat.ogg')
+                    pygame.mixer.music.play(1)
         if not self.is_paused:
             self.time += 1
 
