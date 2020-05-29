@@ -101,6 +101,10 @@ class Game:
         self.all_enemy_bullets.draw(screen)
         self.stats.stat_menu(screen)
 
+        bullet = self.check_collision_player(self.all_enemy_bullets)
+        if bullet is not None:
+            bullet.remove()
+
         if not self.is_paused:
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
@@ -228,8 +232,7 @@ class Game:
             print("distance", distance)
             print("rayon", self.player.hitbox)
             if distance <= self.player.hitbox:
-                return True
-        return False
+                return enemy
 
     def new_game(self):
         self.player = Player(self)
