@@ -5,7 +5,8 @@ import numpy as np
 from player import *
 from enemy import *
 from statistiques import *
-from bulletpattern import *
+from enemybulletpattern import *
+from enemypattern import *
 
 
 class Game:
@@ -27,26 +28,29 @@ class Game:
         self.pressed = {}
         self.time_bullet = 0
         self.wait_bullet_time = 2
+        self.time = 0
 
     def update(self, screen, start):
 
+        self.exited_screen()
         self.time_bullet += 1
         print(self.time_bullet)
-        self.stats.stat_menu(screen)
         screen.blit(self.player.image, self.player.rect)
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
         self.all_enemy_bullets.draw(screen)
 
         for enemies in self.all_enemies:
-            enemies.simple_move()
-            enemies.create_bullet(enemies.rect.x, enemies.rect.y, enemyToPlayer(self, enemies), 20, 'assets/knofe.png')
+            simple_move(self, enemies)
+            enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 20, 6, 'assets/knofe.png')
 
         for bullets in self.player.all_bullets:
             bullets.move()
 
         for enemy_bullet in self.all_enemy_bullets:
             enemy_bullet.move()
+
+        self.stats.stat_menu(screen)
 
         # verif des deplacements
         if self.pressed.get(pygame.K_RIGHT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
@@ -86,11 +90,24 @@ class Game:
                 pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                 pygame.mixer.music.play(-1)
 
+        self.time += 1
+
+    def exited_screen(self):
+        for enemies in self.all_enemies:
+            if enemies.rect.x > (self.real_width + enemies.rect.width) or enemies.rect.x < (0 - enemies.rect.width) or enemies.rect.y > (self.height + enemies.rect.height) or enemies.rect.y < (0 - enemies.rect.height) :
+                enemies.remove()
+        for enemy_bullet in self.all_enemy_bullets:
+            if enemy_bullet.rect.x > (self.real_width + enemy_bullet.rect.width) or enemy_bullet.rect.x < (0 - enemy_bullet.rect.width) or enemy_bullet.rect.y > (self.height + enemy_bullet.rect.height) or enemy_bullet.rect.y < (0 - enemy_bullet.rect.height) :
+                enemy_bullet.remove()
+        for player_bullet in self.player.all_bullets:
+            if player_bullet.rect.x > (self.real_width + player_bullet.rect.width) or player_bullet.rect.x < (0 - player_bullet.rect.width) or player_bullet.rect.y > (self.height + player_bullet.rect.height) or player_bullet.rect.y < (0 - player_bullet.rect.height) :
+                player_bullet.remove()
+
 
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(Enemy(self, 200, 200))
+        self.all_enemies.add(Enemy(self, 200, 200, 1, 0, random.randint(3, 9)))
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)  # change hitbox

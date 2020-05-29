@@ -6,38 +6,35 @@ from enemybullet import *
 class Enemy(pygame.sprite.Sprite):
     """Classe représentant les ennemis"""
 
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, vx, vy, velocity):
         """Constructeur de classe"""
 
         super().__init__()
         self.game = game
         self.health = 100
         self.max_health = 100
-        self.velocity = random.randint(3, 9)
+        self.velocity = velocity
         self.image = pygame.image.load("assets/enemy1.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.left_to_right = bool(random.getrandbits(1))
+        self.vx = vx
+        self.vy = vy
+        self.velocity = velocity
         
+    def move(self):
+        self.rect.x += self.velocity*self.vx
+        self.rect.y += self.velocity*self.vy
 
     def remove(self):
         """Enlève l'ennemi (self) du groupe d'ennemis"""
         self.game.all_enemies.remove(self)
 
-    def simple_move(self):
-        """Effectue un mouvement vertical simple de l'ennemi"""
+    def set_move(self, vx, vy, velocity):
+        self.vx = vx
+        self.vy = vy
+        self.velocity = velocity
 
-        if self.left_to_right:
-            if self.rect.x < self.game.real_width - (self.rect.width + self.velocity):
-                self.rect.x += self.velocity
-            else:
-                self.left_to_right = False
-        else:
-            if self.rect.x > self.velocity:
-                self.rect.x -= self.velocity
-            else:
-                self.left_to_right = True
 
     def damage(self, amount):
         self.health -= amount
@@ -45,7 +42,7 @@ class Enemy(pygame.sprite.Sprite):
             self.remove()
 
 
-    def create_bullet(self, x, y, angle, v, asset):
+    def create_bullet(self, x, y, angle, v, cooldown, asset):
         self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))
     
 
