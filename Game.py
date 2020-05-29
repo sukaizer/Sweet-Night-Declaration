@@ -92,14 +92,18 @@ class Game:
                 self.walkCount += 1
 
         if self.is_slow:
-            pygame.draw.circle(screen, (255, 0, 0, 0.1), (
+            pygame.draw.circle(screen, (0, 255, 0, 0.1), (
                 self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
-                               self.player.hitbox + 6)
+                               self.player.hitbox + 7)
         # dessin des objets
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
         self.all_enemy_bullets.draw(screen)
         self.stats.stat_menu(screen)
+
+        bullet = self.check_collision_player(self.all_enemy_bullets)
+        if bullet is not None:
+            bullet.remove()
 
         if not self.is_paused:
             for enemies in self.all_enemies:
@@ -137,7 +141,6 @@ class Game:
 
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
             self.bulletSound.play()
-            # ralentir le nombre de balles
             self.player.shoot()
             self.time_bullet = 0
 
@@ -225,11 +228,8 @@ class Game:
             distX = cx - testX
             distY = cy - testY
             distance = numpy.sqrt((distX * distX) + (distY * distY))
-            print("distance", distance)
-            print("rayon", self.player.hitbox)
             if distance <= self.player.hitbox:
-                return True
-        return False
+                return enemy
 
     def new_game(self):
         self.player = Player(self)

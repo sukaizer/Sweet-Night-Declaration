@@ -20,5 +20,5 @@ def simple_move(game, enemy):
     enemy.move()
     if enemy.vx <= 0 and enemy.rect.x < 40:
         enemy.set_move(1, np.sin(game.time), enemy.velocity)
-    if enemy.vx > 0 and enemy.rect.x > game.real_width - 200:
+    if enemy.vx > 0 and enemy.rect.x > game.real_width - enemy.rect.width:
         enemy.set_move(-1, np.sin(game.time), enemy.velocity)
