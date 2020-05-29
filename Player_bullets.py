@@ -1,7 +1,7 @@
 import pygame
 
 
-class Bullet(pygame.sprite.Sprite):
+class PlayerBullet(pygame.sprite.Sprite):
 
     def __init__(self, player, game):
         super().__init__()
@@ -22,7 +22,3 @@ class Bullet(pygame.sprite.Sprite):
         for enemies in self.game.check_collision(self, self.game.all_enemies):
             self.remove()
             enemies.damage(self.player.attack)
-
-        if self.rect.y < 0:
-            # on supprime le sprite s'il sort de l'ecran
-            self.remove()

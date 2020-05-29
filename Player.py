@@ -1,6 +1,6 @@
 import pygame
 from Game import *
-from Bullet import Bullet
+from Player_bullets import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -46,10 +46,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
-        self.hitbox = self.rect.width // 6  # rayon
+        self.hitbox = self.rect.width // 20  # rayon
 
     def shoot(self):
-        self.all_bullets.add(Bullet(self, self.game))
+        self.all_bullets.add(PlayerBullet(self, self.game))
 
     def move_right(self):
         """Permet de se déplacer vers la droite"""
