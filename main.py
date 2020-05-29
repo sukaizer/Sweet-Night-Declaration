@@ -27,7 +27,6 @@ while game.is_running:
 
     screen.blit(background, (0, 0))
     clock.tick(60)
-
     # boucle de jeu
     if game.is_playing and not game.is_dead:
         game.update(screen)
