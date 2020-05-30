@@ -109,8 +109,7 @@ class Game:
         if not self.is_paused:
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
-                if self.time % 10 == 0:
-                    enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 6,
+                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
                                       'assets/enemies/knofe.png')
 
             for bullets in self.player.all_bullets:
