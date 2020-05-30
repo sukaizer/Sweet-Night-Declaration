@@ -3,11 +3,11 @@ import sys
 import numpy
 import pygame
 
-from Enemy_bullet_patern import *
+from Enemy_bullet_pattern import *
 from Player import *
 from Enemy import *
 from Stats import *
-from Enemy_patern import *
+from Enemy_pattern import *
 
 
 class Game:
