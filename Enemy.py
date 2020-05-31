@@ -41,6 +41,9 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.remove()
 
+    def create_bullet(self, x, y, angle, v, asset):
+        self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))
+
     def create_bullet(self, x, y, angle, v, cooldown, asset):
         if self.game.time % cooldown == 0:
             self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))

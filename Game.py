@@ -57,20 +57,133 @@ class Game:
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
 
-    def update(self, screen):
-        self.exited_screen()
-        if self.is_paused:
-            screen.blit(self.pause, self.pause_rect)
-        if not self.is_paused:
-            self.time_bullet += 1
-            self.time_collision += 1
 
-        if self.walkCount >= self.number_frames * len(self.player.walkLeft):
-            self.walkCount = 0
+
+    def update(self, screen):
+
+        self.script_0()
+
+        self.exited_screen()
+        self.draw_pause_screen(screen)
+        
+
+        
 
         # Animation sprite joueur
+        self.draw_player(screen)
+        # dessin des objets
+        self.all_enemies.draw(screen)
+        self.player.all_bullets.draw(screen)
+        self.all_enemy_bullets.draw(screen)
+        self.stats.stat_menu(screen)
+
+        self.remove_bullet_collision()
+
+        
+
+        #deplacement bullets
+        self.move_bullets()
+
+        # verif des deplacements
+
+        self.update_player()
+
+        if not self.is_paused:
+            self.time_bullet += 1
+            
+
+        self.input_detection()
+
+        self.loop_song()
+        
+    
+        if not self.is_paused:
+            self.time += 1
+
+
+    def script_0(self):
+        if not self.is_paused:
+            for enemies in self.all_enemies:
+                simple_move(self, enemies)
+                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
+                                        'assets/enemies/knofe.png')
+            if self.time % 60 == 0:
+                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
+                
+                    
+                   
+
+    def draw_pause_screen(self, screen):
+        if self.is_paused:
+            screen.blit(self.pause, self.pause_rect)
+
+        
+    def exited_screen(self):
+        for enemies in self.all_enemies:
+            if enemies.rect.x > (self.real_width + enemies.rect.width) or enemies.rect.x < (
+                    0 - enemies.rect.width) or enemies.rect.y > (
+                    self.height + enemies.rect.height) or enemies.rect.y < (0 - enemies.rect.height):
+                enemies.remove()
+        for enemy_bullet in self.all_enemy_bullets:
+            if enemy_bullet.rect.x > (self.real_width + enemy_bullet.rect.width) or enemy_bullet.rect.x < (
+                    0 - enemy_bullet.rect.width) or enemy_bullet.rect.y > (
+                    self.height + enemy_bullet.rect.height) or enemy_bullet.rect.y < (0 - enemy_bullet.rect.height):
+                enemy_bullet.remove()
+        for player_bullet in self.player.all_bullets:
+            if player_bullet.rect.x > (self.real_width + player_bullet.rect.width) or player_bullet.rect.x < (
+                    0 - player_bullet.rect.width) or player_bullet.rect.y > (
+                    self.height + player_bullet.rect.height) or player_bullet.rect.y < (0 - player_bullet.rect.height):
+                player_bullet.remove()
+
+
+    def update_player(self):
+        if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
+                pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+            self.player.move_right()
+            self.left = False
+            self.right = True
+        elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and not self.pressed.get(
+                pygame.K_RIGHT) and self.player.rect.x > 0:
+            self.player.move_left()
+            self.left = True
+            self.right = False
+        else:
+            self.left = False
+            self.right = False
+        if not self.is_paused and self.pressed.get(pygame.K_UP) and not self.pressed.get(
+                pygame.K_DOWN) and self.player.rect.y > 0:
+            self.player.move_up()
+        elif not self.is_paused and self.pressed.get(pygame.K_DOWN) and not self.pressed.get(
+                pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
+            self.player.move_down()
+
+
+
+        if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
+            self.bulletSound.play()
+            self.player.shoot()
+            self.time_bullet = 0
+
+        if self.time_collision > self.wait_collision_time:
+            self.is_immune = False
+
+        if not self.is_immune:
+            if self.player.check_player_collision():  # collision du personnage
+                self.time_collision = 0
+                self.is_immune = True
+                if self.player.health == 0:
+                    self.is_dead = True
+                    self.is_playing = False
+
         if self.is_immune:
             self.immune_count += 1
+
+        if not self.is_paused:
+            self.time_collision += 1
+
+    
+    def draw_player(self, screen):
+        if self.is_immune:
             if self.immune_count % 2 == 0:
                 if self.left:
                     screen.blit(self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
@@ -96,66 +209,11 @@ class Game:
             pygame.draw.circle(screen, (0, 255, 0, 0.1), (
                 self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
                                self.player.hitbox + 7)
-        # dessin des objets
-        self.all_enemies.draw(screen)
-        self.player.all_bullets.draw(screen)
-        self.all_enemy_bullets.draw(screen)
-        self.stats.stat_menu(screen)
+        if self.walkCount >= self.number_frames * len(self.player.walkLeft):
+            self.walkCount = 0
+            
 
-        bullet = self.check_collision_player(self.all_enemy_bullets)
-        if bullet is not None:
-            bullet.remove()
-
-        if not self.is_paused:
-            for enemies in self.all_enemies:
-                simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
-                                      'assets/enemies/knofe.png')
-
-            for bullets in self.player.all_bullets:
-                bullets.move()
-
-            for enemy_bullet in self.all_enemy_bullets:
-                enemy_bullet.move()
-
-        # verif des deplacements
-
-        if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
-                pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
-            self.player.move_right()
-            self.left = False
-            self.right = True
-        elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and not self.pressed.get(
-                pygame.K_RIGHT) and self.player.rect.x > 0:
-            self.player.move_left()
-            self.left = True
-            self.right = False
-        else:
-            self.left = False
-            self.right = False
-        if not self.is_paused and self.pressed.get(pygame.K_UP) and not self.pressed.get(
-                pygame.K_DOWN) and self.player.rect.y > 0:
-            self.player.move_up()
-        elif not self.is_paused and self.pressed.get(pygame.K_DOWN) and not self.pressed.get(
-                pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
-            self.player.move_down()
-
-        if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
-            self.bulletSound.play()
-            self.player.shoot()
-            self.time_bullet = 0
-
-        if self.time_collision > self.wait_collision_time:
-            self.is_immune = False
-
-        if not self.is_immune:
-            if self.player.check_player_collision():  # collision du personnage
-                self.time_collision = 0
-                self.is_immune = True
-                if self.player.health == 0:
-                    self.is_dead = True
-                    self.is_playing = False
-
+    def input_detection(self):
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
             if event.type == pygame.QUIT:
@@ -185,30 +243,40 @@ class Game:
                 else:
                     pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
-        if not self.is_paused:
-            self.time += 1
 
-    def exited_screen(self):
-        for enemies in self.all_enemies:
-            if enemies.rect.x > (self.real_width + enemies.rect.width) or enemies.rect.x < (
-                    0 - enemies.rect.width) or enemies.rect.y > (
-                    self.height + enemies.rect.height) or enemies.rect.y < (0 - enemies.rect.height):
-                enemies.remove()
-        for enemy_bullet in self.all_enemy_bullets:
-            if enemy_bullet.rect.x > (self.real_width + enemy_bullet.rect.width) or enemy_bullet.rect.x < (
-                    0 - enemy_bullet.rect.width) or enemy_bullet.rect.y > (
-                    self.height + enemy_bullet.rect.height) or enemy_bullet.rect.y < (0 - enemy_bullet.rect.height):
-                enemy_bullet.remove()
-        for player_bullet in self.player.all_bullets:
-            if player_bullet.rect.x > (self.real_width + player_bullet.rect.width) or player_bullet.rect.x < (
-                    0 - player_bullet.rect.width) or player_bullet.rect.y > (
-                    self.height + player_bullet.rect.height) or player_bullet.rect.y < (0 - player_bullet.rect.height):
-                player_bullet.remove()
+
+
+    def loop_song(self):
+        for event in pygame.event.get():
+            if event.type == self.SONG_END:
+                if not self.song_played:
+                    pygame.mixer.music.load('assets/music/stage01start.ogg')
+                    pygame.mixer.music.play(1)
+                    self.song_played = True
+                else:
+                    pygame.mixer.music.load('assets/music/stage01repeat.ogg')
+                    pygame.mixer.music.play(1)
+
 
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
 
         self.all_enemies.add(Enemy(self, 200, 200, 1, 0, random.randint(3, 9)))
+
+    def move_bullets(self):
+        if not self.is_paused:
+            for bullets in self.player.all_bullets:
+                bullets.move()
+
+            for enemy_bullet in self.all_enemy_bullets:
+                enemy_bullet.move()
+
+
+    def remove_bullet_collision(self):
+        bullet = self.check_collision_player(self.all_enemy_bullets)
+        if bullet is not None:
+            bullet.remove()
+
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)
@@ -241,7 +309,7 @@ class Game:
         self.player = Player(self)
         self.stats = Stats(self, self.player)
         self.all_enemies = pygame.sprite.Group()
-        self.spawn_enemy()
+        self.all_enemy_bullets = pygame.sprite.Group()
         self.pressed = {}
         self.time_bullet = 0
         self.wait_bullet_time = 2

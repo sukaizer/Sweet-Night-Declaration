@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = self.max_velocity
 
     def check_player_collision(self):
-        if self.game.check_collision_player(self.game.all_enemies):
+        if self.game.check_collision_player(self.game.all_enemies) or self.game.check_collision_player(self.game.all_enemy_bullets):
             self.health -= 1
             return True
         else:
