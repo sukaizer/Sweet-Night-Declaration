@@ -59,10 +59,13 @@ class Game:
 
 
 
+
     def update(self, screen):
 
         self.script_0()
 
+        pygame_event = pygame.event.get()
+        
         self.exited_screen()
         self.draw_pause_screen(screen)
         
@@ -84,21 +87,24 @@ class Game:
         #deplacement bullets
         self.move_bullets()
 
-        # verif des deplacements
-
-        self.update_player()
+        # update joueur (deplacement, shoot)
+        self.update_player(pygame_event)
 
         if not self.is_paused:
             self.time_bullet += 1
             
-
-        self.input_detection()
-
-        self.loop_song()
+        
+        #looping song (needs fix)
+        self.loop_song(pygame_event)
         
     
         if not self.is_paused:
             self.time += 1
+
+
+        #close programm if window is closed
+        self.closing_detection(pygame_event)
+
 
 
     def script_0(self):
@@ -136,7 +142,7 @@ class Game:
                 player_bullet.remove()
 
 
-    def update_player(self):
+    def update_player(self, pygame_event):
         if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
                 pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
@@ -157,12 +163,33 @@ class Game:
                 pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
-
-
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
             self.bulletSound.play()
             self.player.shoot()
             self.time_bullet = 0
+
+        for event in pygame_event:
+            # détection de pression d'une touche
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self.pressed[event.key] = True
+                if not self.is_paused and event.key == pygame.K_q:
+                    self.player.slow_player()
+                    self.is_slow = True
+                if not self.is_paused and event.key == pygame.K_ESCAPE:
+                    self.is_paused = True
+                elif self.is_paused and event.key == pygame.K_ESCAPE:
+                    self.is_paused = False
+            # si on lache une touche
+            elif event.type == pygame.KEYUP:
+                self.pressed[event.key] = False
+                if not self.is_paused and event.key == pygame.K_q:
+                    self.player.normal_velocity()
+                    self.is_slow = False
+
+
 
         if self.time_collision > self.wait_collision_time:
             self.is_immune = False
@@ -213,41 +240,17 @@ class Game:
             self.walkCount = 0
             
 
-    def input_detection(self):
-        for event in pygame.event.get():
+    def closing_detection(self, pygame_event):
+        for event in pygame_event:
             # detection de la fermeture de la fenetre
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            # détection de pression d'une touche
-            elif event.type == pygame.KEYDOWN:
-                self.pressed[event.key] = True
-                if not self.is_paused and event.key == pygame.K_q:
-                    self.player.slow_player()
-                    self.is_slow = True
-                if not self.is_paused and event.key == pygame.K_ESCAPE:
-                    self.is_paused = True
-                elif self.is_paused and event.key == pygame.K_ESCAPE:
-                    self.is_paused = False
-            # si on lache une touche
-            elif event.type == pygame.KEYUP:
-                self.pressed[event.key] = False
-                if not self.is_paused and event.key == pygame.K_q:
-                    self.player.normal_velocity()
-                    self.is_slow = False
-            elif event.type == self.SONG_END:
-                if not self.song_played:
-                    pygame.mixer.music.load('assets/music/stage01start.ogg')
-                    pygame.mixer.music.play(1)
-                    self.song_played = True
-                else:
-                    pygame.mixer.music.load('assets/music/stage01repeat.ogg')
-                    pygame.mixer.music.play(1)
+            
 
 
-
-    def loop_song(self):
-        for event in pygame.event.get():
+    def loop_song(self, pygame_event):
+        for event in pygame_event:
             if event.type == self.SONG_END:
                 if not self.song_played:
                     pygame.mixer.music.load('assets/music/stage01start.ogg')
@@ -325,3 +328,4 @@ class Game:
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
         self.is_slow = False
+        
