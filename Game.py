@@ -56,36 +56,27 @@ class Game:
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
 
-
-
     def update(self, screen):
 
         self.script_0()
 
         self.skelet(screen)
 
-
-
     def script_0(self):
         if not self.is_paused:
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
-                                        'assets/enemies/knofe.png')
-            if self.time % 60 == 0:
+                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 20,
+                                      'assets/enemies/circle.png')
+            if self.time % 80 == 0:
                 self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
-                
-    
-                    
+
     def skelet(self, screen):
 
         pygame_event = pygame.event.get()
-        
+
         self.exited_screen()
         self.draw_pause_screen(screen)
-        
-
-        
 
         # Animation sprite joueur
         self.draw_player(screen)
@@ -95,43 +86,28 @@ class Game:
         self.all_enemy_bullets.draw(screen)
         self.stats.stat_menu(screen)
 
-        
-
-        
-
-        #deplacement bullets
+        # deplacement bullets
         self.move_bullets()
-        self.remove_bullet_collision()
 
         # update joueur (deplacement, shoot)
         self.update_player(pygame_event)
 
-        
-            
-        
-        #looping song (needs fix)
+        self.remove_bullet_collision()
+
+        # looping song (needs fix)
         self.loop_song(pygame_event)
-        
-        
+
         if not self.is_paused:
             self.time += 1
 
-
-        #close programm if window is closed
+        # close programm if window is closed
         self.closing_detection(pygame_event)
-
-
-
-
-
-
 
     def draw_pause_screen(self, screen):
         """draw pause screen"""
         if self.is_paused:
             screen.blit(self.pause, self.pause_rect)
 
-        
     def exited_screen(self):
         """remove element that exited the visible screen"""
         for enemies in self.all_enemies:
@@ -150,11 +126,10 @@ class Game:
                     self.height + player_bullet.rect.height) or player_bullet.rect.y < (0 - player_bullet.rect.height):
                 player_bullet.remove()
 
-
     def update_player(self, pygame_event):
         """update the state of the player"""
 
-        #update the position of the player when inputs detected
+        # update the position of the player when inputs detected
         if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
                 pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
@@ -175,17 +150,17 @@ class Game:
                 pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
-        #player shoot if shoot is not on cooldown
+        # player shoot if shoot is not on cooldown
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.player.time_bullet > self.wait_bullet_time:
             self.bulletSound.play()
             self.player.shoot()
             self.player.time_bullet = 0
-        #shoot cooldown
+        # shoot cooldown
         if not self.is_paused:
             self.player.time_bullet += 1
 
         for event in pygame_event:
-            #for focus mode
+            # for focus mode
             if event.type == pygame.KEYDOWN:
                 self.pressed[event.key] = True
                 if not self.is_paused and event.key == pygame.K_q:
@@ -202,8 +177,7 @@ class Game:
                     self.player.normal_velocity()
                     self.is_slow = False
 
-
-        #desactivate immune mode if player got last hit since long enough
+        # desactivate immune mode if player got last hit since long enough
         if self.time_collision > self.wait_collision_time:
             self.is_immune = False
 
@@ -221,7 +195,6 @@ class Game:
         if not self.is_paused:
             self.time_collision += 1
 
-    
     def draw_player(self, screen):
         if self.is_immune:
             if self.immune_count % 2 == 0:
@@ -251,7 +224,6 @@ class Game:
                                self.player.hitbox + 7)
         if self.walkCount >= self.number_frames * len(self.player.walkLeft):
             self.walkCount = 0
-            
 
     def closing_detection(self, pygame_event):
         for event in pygame_event:
@@ -259,8 +231,6 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
-
 
     def loop_song(self, pygame_event):
         for event in pygame_event:
@@ -272,7 +242,6 @@ class Game:
                 else:
                     pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
-
 
     def spawn_enemy(self):
         """Permet de faire apparaitre un ennemi"""
@@ -287,12 +256,10 @@ class Game:
             for enemy_bullet in self.all_enemy_bullets:
                 enemy_bullet.move()
 
-
     def remove_bullet_collision(self):
         bullet = self.check_collision_player(self.all_enemy_bullets)
         if bullet is not None:
             bullet.remove()
-
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, collided=pygame.sprite.collide_rect)
@@ -341,4 +308,3 @@ class Game:
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
         self.is_slow = False
-        
