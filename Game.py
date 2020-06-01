@@ -59,10 +59,26 @@ class Game:
 
 
 
-
     def update(self, screen):
 
         self.script_0()
+
+        self.skelet(screen)
+
+
+
+    def script_0(self):
+        if not self.is_paused:
+            for enemies in self.all_enemies:
+                simple_move(self, enemies)
+                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
+                                        'assets/enemies/knofe.png')
+            if self.time % 60 == 0:
+                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
+                
+    
+                    
+    def skelet(self, screen):
 
         pygame_event = pygame.event.get()
         
@@ -107,17 +123,10 @@ class Game:
 
 
 
-    def script_0(self):
-        if not self.is_paused:
-            for enemies in self.all_enemies:
-                simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 10,
-                                        'assets/enemies/knofe.png')
-            if self.time % 60 == 0:
-                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
-                
-                    
-                   
+
+
+
+
 
     def draw_pause_screen(self, screen):
         if self.is_paused:
