@@ -47,7 +47,7 @@ class Game:
 
         self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
         self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
-        self.hitSound.set_volume(0.05)
+        self.hitSound.set_volume(0.01)
         self.SONG_END = pygame.USEREVENT + 1  # event de fin de musique
         self.song_played = False
         self.pause = pygame.image.load('assets/title/pause.png').convert_alpha()
@@ -56,20 +56,7 @@ class Game:
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
 
-    def update(self, screen):
 
-        self.script_0()
-
-        self.skelet(screen)
-
-    def script_0(self):
-        if not self.is_paused:
-            for enemies in self.all_enemies:
-                simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 20,
-                                      'assets/enemies/circle.png')
-            if self.time % 80 == 0:
-                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
 
     def skelet(self, screen):
 
@@ -243,10 +230,10 @@ class Game:
                     pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
 
-    def spawn_enemy(self):
+    def spawn_enemy(self, EnemyType, x, y, vx, vy, vel):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(Enemy(self, 200, 200, 1, 0, random.randint(3, 9)))
+        self.all_enemies.add(EnemyType(self, x, y, vx, vy, vel))
 
     def move_bullets(self):
         if not self.is_paused:

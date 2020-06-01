@@ -14,9 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.nb_bomb = 0
         self.health = 3
         self.max_health = 3
-        self.attack = 5
+        self.attack = 20
         self.max_velocity = 8  # pixels
         self.velocity = 8
+        self.slow_velocity = 4
         self.all_bullets = pygame.sprite.Group()
         self.image = pygame.image.load('assets/animated_sprites/d1.png')
         self.walkRight = [pygame.image.load('assets/animated_sprites/d1.png').convert_alpha(),
@@ -50,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.time_bullet = 0
 
     def shoot(self):
-        self.all_bullets.add(PlayerBullet(self, self.game))
+        self.all_bullets.add(PlayerBullet(self, self.game, self.attack))
 
     def move_right(self):
         """Permet de se déplacer vers la droite"""
@@ -75,7 +76,7 @@ class Player(pygame.sprite.Sprite):
     def slow_player(self):
         """Ralentit le joueur pour permettre plus de précision"""
 
-        self.velocity = 4
+        self.velocity = self.slow_velocity
 
     def normal_velocity(self):
         """Redonne au joueur sa vitesse de base"""

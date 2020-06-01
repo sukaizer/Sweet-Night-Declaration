@@ -9,6 +9,7 @@ from Enemy import *
 from Stats import *
 from Enemy_pattern import *
 from Game import *
+from Enemies.Little_UFO import *
 
 
 class Stage01(Game):
@@ -24,7 +25,8 @@ class Stage01(Game):
         if not self.is_paused:
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
-                enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 20,
-                                      'assets/enemies/circle.png')
+                if self.time % 80 == 0:
+                    bulletpattern_circle(self, enemies, 5, 60, 'assets/enemies/circle.png')
+                            
             if self.time % 80 == 0:
-                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
+                self.spawn_enemy(Little_UFO, 0, 20, 1, 0, random.randint(3, 9))

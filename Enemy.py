@@ -14,13 +14,12 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 30
         self.max_health = 30
         self.velocity = velocity
-        self.image = pygame.image.load("assets/enemies/enemy1.png").convert_alpha()
+        self.image = pygame.image.load("assets/bullet.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.vx = vx
         self.vy = vy
-        self.velocity = velocity
 
     def move(self):
         self.rect.x += self.velocity * self.vx
@@ -43,7 +42,3 @@ class Enemy(pygame.sprite.Sprite):
 
     def create_bullet(self, x, y, angle, v, asset):
         self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))
-
-    def create_bullet(self, x, y, angle, v, cooldown, asset):
-        if self.game.time % cooldown == 0:
-            self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))

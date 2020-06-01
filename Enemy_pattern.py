@@ -22,3 +22,4 @@ def simple_move(game, enemy):
         enemy.set_move(1, np.sin(game.time), enemy.velocity)
     if enemy.vx > 0 and enemy.rect.x > game.real_width:
         enemy.set_move(-1, np.sin(game.time), enemy.velocity)
+
