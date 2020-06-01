@@ -69,7 +69,7 @@ class Game:
                 enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 20,
                                       'assets/enemies/circle.png')
             if self.time % 80 == 0:
-                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
+                self.spawn_enemy(0, 20, 1, 0, random.randint(3, 9))
 
     def skelet(self, screen):
 
@@ -243,10 +243,10 @@ class Game:
                     pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
 
-    def spawn_enemy(self):
+    def spawn_enemy(self, x, y, vx, vy, vel):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(Enemy(self, 200, 200, 1, 0, random.randint(3, 9)))
+        self.all_enemies.add(Enemy(self, x, y, vx, vy, vel))
 
     def move_bullets(self):
         if not self.is_paused:
