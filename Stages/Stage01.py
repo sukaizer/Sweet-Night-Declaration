@@ -27,4 +27,4 @@ class Stage01(Game):
                 enemies.create_bullet(enemies.rect.x, enemies.rect.y, bullet_to_player(self, enemies), 5, 20,
                                       'assets/enemies/circle.png')
             if self.time % 80 == 0:
-                self.all_enemies.add(Enemy(self, 0, 20, 1, 0, random.randint(3, 9)))
+                self.spawn_enemy(0, 20, 1, 0, random.randint(3, 9))

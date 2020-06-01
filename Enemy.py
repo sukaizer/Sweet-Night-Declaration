@@ -20,7 +20,6 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = y
         self.vx = vx
         self.vy = vy
-        self.velocity = velocity
 
     def move(self):
         self.rect.x += self.velocity * self.vx

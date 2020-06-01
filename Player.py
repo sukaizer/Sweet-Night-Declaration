@@ -15,8 +15,9 @@ class Player(pygame.sprite.Sprite):
         self.health = 3
         self.max_health = 3
         self.attack = 5
-        self.max_velocity = 10  # pixels
-        self.velocity = 10
+        self.max_velocity = 8  # pixels
+        self.velocity = 8
+        self.slow_velocity = 4
         self.all_bullets = pygame.sprite.Group()
         self.image = pygame.image.load('assets/animated_sprites/d1.png')
         self.walkRight = [pygame.image.load('assets/animated_sprites/d1.png').convert_alpha(),
@@ -75,7 +76,7 @@ class Player(pygame.sprite.Sprite):
     def slow_player(self):
         """Ralentit le joueur pour permettre plus de précision"""
 
-        self.velocity = 4
+        self.velocity = self.slow_velocity
 
     def normal_velocity(self):
         """Redonne au joueur sa vitesse de base"""
