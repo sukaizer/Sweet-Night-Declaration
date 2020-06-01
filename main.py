@@ -3,6 +3,7 @@ import pygame
 from Game import *
 from Start_menu import *
 from End_menu import *
+from Stages.Stage01 import *
 
 pygame.init()
 
@@ -13,7 +14,7 @@ height = 980
 pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
 
-game = Game()
+game = Stage01()
 start = Start_menu(game)
 clock = pygame.time.Clock()
 end = End_menu(game)
