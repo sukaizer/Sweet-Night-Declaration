@@ -47,6 +47,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
         self.hitbox = self.rect.width // 25  # rayon
+        self.time_bullet = 0
 
     def shoot(self):
         self.all_bullets.add(PlayerBullet(self, self.game))

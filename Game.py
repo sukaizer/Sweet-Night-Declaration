@@ -30,7 +30,6 @@ class Game:
         self.is_slow = False
         # Variables de temps
 
-        self.time_bullet = 0
         self.wait_bullet_time = 2
         self.time_collision = 120
         self.wait_collision_time = self.time_collision
@@ -115,8 +114,6 @@ class Game:
         
         
         if not self.is_paused:
-                self.time_bullet += 1
-        if not self.is_paused:
             self.time += 1
 
 
@@ -129,13 +126,14 @@ class Game:
 
 
 
-
     def draw_pause_screen(self, screen):
+        """draw pause screen"""
         if self.is_paused:
             screen.blit(self.pause, self.pause_rect)
 
         
     def exited_screen(self):
+        """remove element that exited the visible screen"""
         for enemies in self.all_enemies:
             if enemies.rect.x > (self.real_width + enemies.rect.width) or enemies.rect.x < (
                     0 - enemies.rect.width) or enemies.rect.y > (
@@ -154,6 +152,9 @@ class Game:
 
 
     def update_player(self, pygame_event):
+        """update the state of the player"""
+
+        #update the position of the player when inputs detected
         if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
                 pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
@@ -174,17 +175,18 @@ class Game:
                 pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
-        if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.time_bullet > self.wait_bullet_time:
+        #player shoot if shoot is not on cooldown
+        if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.player.time_bullet > self.wait_bullet_time:
             self.bulletSound.play()
             self.player.shoot()
-            self.time_bullet = 0
+            self.player.time_bullet = 0
+        #shoot cooldown
+        if not self.is_paused:
+            self.player.time_bullet += 1
 
         for event in pygame_event:
-            # détection de pression d'une touche
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            #for focus mode
+            if event.type == pygame.KEYDOWN:
                 self.pressed[event.key] = True
                 if not self.is_paused and event.key == pygame.K_q:
                     self.player.slow_player()
@@ -201,7 +203,7 @@ class Game:
                     self.is_slow = False
 
 
-
+        #desactivate immune mode if player got last hit since long enough
         if self.time_collision > self.wait_collision_time:
             self.is_immune = False
 
@@ -325,7 +327,7 @@ class Game:
         self.all_enemies = pygame.sprite.Group()
         self.all_enemy_bullets = pygame.sprite.Group()
         self.pressed = {}
-        self.time_bullet = 0
+        self.player.time_bullet = 0
         self.wait_bullet_time = 2
         self.time_collision = 120
         self.wait_collision_time = self.time_collision
