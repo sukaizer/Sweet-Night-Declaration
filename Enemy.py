@@ -11,8 +11,8 @@ class Enemy(pygame.sprite.Sprite):
 
         super().__init__()
         self.game = game
-        self.health = 100
-        self.max_health = 100
+        self.health = 30
+        self.max_health = 30
         self.velocity = velocity
         self.image = pygame.image.load("assets/enemies/enemy1.png").convert_alpha()
         self.rect = self.image.get_rect()
