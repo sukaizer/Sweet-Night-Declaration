@@ -96,24 +96,26 @@ class Game:
         self.all_enemy_bullets.draw(screen)
         self.stats.stat_menu(screen)
 
-        self.remove_bullet_collision()
+        
 
         
 
         #deplacement bullets
         self.move_bullets()
+        self.remove_bullet_collision()
 
         # update joueur (deplacement, shoot)
         self.update_player(pygame_event)
 
-        if not self.is_paused:
-            self.time_bullet += 1
+        
             
         
         #looping song (needs fix)
         self.loop_song(pygame_event)
         
-    
+        
+        if not self.is_paused:
+                self.time_bullet += 1
         if not self.is_paused:
             self.time += 1
 
