@@ -12,13 +12,17 @@ class EnemyBullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.fx = x
+        self.fy = y
         self.angle = angle
         print(angle)
         self.v = v
+        self.bullet_time = 0
 
     def move(self):
-        self.rect.x += np.cos(self.angle) * self.v
-        self.rect.y += np.sin(self.angle) * self.v
+        self.rect.x = self.fx + np.cos(self.angle) * self.v * self.bullet_time 
+        self.rect.y = self.fy + np.sin(self.angle) * self.v * self.bullet_time
+        self.bullet_time += 1
         
 
     def setAngle(self, angle):
