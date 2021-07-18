@@ -35,7 +35,12 @@ class Start_menu:
         self.menu_repeat_music()
 
     def start_menu(self, screen):
-        screen.blit(self.start1, self.start_rect1)
+        (x, y) = pygame.mouse.get_pos()
+        if self.start_rect1.x < x < self.start_rect1.x + self.start_rect1.width and \
+                self.start_rect1.y < y < self.start_rect1.y + self.start_rect1.height:
+            screen.blit(self.start2, self.start_rect2)
+        else:
+            screen.blit(self.start1, self.start_rect1)
         screen.blit(self.title, self.title_rect)
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
