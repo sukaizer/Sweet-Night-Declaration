@@ -53,6 +53,22 @@ class Player(pygame.sprite.Sprite):
     def shoot(self):
         self.all_bullets.add(PlayerBullet(self, self.game, self.attack))
 
+    def move_upright(self):
+        self.rect.x += self.velocity*0.7
+        self.rect.y -= self.velocity*0.7
+
+    def move_upleft(self):
+        self.rect.x -= self.velocity*0.7
+        self.rect.y -= self.velocity*0.7
+
+    def move_downright(self):
+        self.rect.x += self.velocity*0.7
+        self.rect.y += self.velocity*0.7
+
+    def move_downleft(self):
+        self.rect.x -= self.velocity*0.7
+        self.rect.y += self.velocity*0.7
+
     def move_right(self):
         """Permet de se déplacer vers la droite"""
 

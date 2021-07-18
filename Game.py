@@ -114,14 +114,79 @@ class Game:
     def update_player(self, pygame_event):
         """update the state of the player"""
 
+        if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and self.pressed.get(
+                pygame.K_UP):
+            if self.player.rect.x + self.player.rect.width * 1.2 < self.real_width and self.player.rect.y > 0:
+                self.player.move_upright()
+                self.left = False
+                self.right = True
+            elif self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+                self.player.move_right()
+                self.left = False
+                self.right = True
+            elif self.player.rect.y > 0:
+                self.player.move_up()
+                self.left = False
+                self.right = False
+
+        elif not self.is_paused and self.pressed.get(pygame.K_RIGHT) and self.pressed.get(
+                pygame.K_DOWN):
+            if self.player.rect.x + self.player.rect.width * 1.2 < self.real_width and \
+                    self.player.rect.y + self.player.rect.height < self.height:
+                self.player.move_downright()
+                self.left = False
+                self.right = True
+            elif self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+                self.player.move_right()
+                self.left = False
+                self.right = True
+            elif self.player.rect.y + self.player.rect.height < self.height:
+                self.player.move_down()
+                self.left = False
+                self.right = False
+
+        elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and self.pressed.get(
+                pygame.K_UP):
+            if self.player.rect.x > 0 and self.player.rect.y > 0:
+                self.player.move_upleft()
+                self.left = True
+                self.right = False
+            elif self.player.rect.x > 0:
+                self.player.move_left()
+                self.left = True
+                self.right = False
+            elif self.player.rect.y > 0:
+                self.player.move_up()
+                self.left = False
+                self.right = False
+
+        elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and self.pressed.get(
+                pygame.K_DOWN):
+            if self.player.rect.x > 0 and self.player.rect.y + self.player.rect.height < self.height:
+                self.player.move_downleft()
+                self.left = True
+                self.right = False
+            elif self.player.rect.x > 0:
+                self.player.move_left()
+                self.left = True
+                self.right = False
+            elif self.player.rect.y + self.player.rect.height < self.height:
+                self.player.move_down()
+                self.left = False
+                self.right = False
+
         # update the position of the player when inputs detected
-        if not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
-                pygame.K_LEFT) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+        elif not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
+                pygame.K_LEFT) and not self.pressed.get(
+            pygame.K_UP) and not self.pressed.get(
+            pygame.K_DOWN) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
             self.left = False
             self.right = True
         elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and not self.pressed.get(
-                pygame.K_RIGHT) and self.player.rect.x > 0:
+                pygame.K_RIGHT) and not self.pressed.get(
+            pygame.K_UP) and not self.pressed.get(
+            pygame.K_DOWN) and self.player.rect.x > 0:
             self.player.move_left()
             self.left = True
             self.right = False
@@ -129,10 +194,14 @@ class Game:
             self.left = False
             self.right = False
         if not self.is_paused and self.pressed.get(pygame.K_UP) and not self.pressed.get(
-                pygame.K_DOWN) and self.player.rect.y > 0:
+                pygame.K_DOWN) and not self.pressed.get(
+            pygame.K_LEFT) and not self.pressed.get(
+            pygame.K_RIGHT) and self.player.rect.y > 0:
             self.player.move_up()
         elif not self.is_paused and self.pressed.get(pygame.K_DOWN) and not self.pressed.get(
-                pygame.K_UP) and self.player.rect.y + self.player.rect.height < self.height:
+                pygame.K_UP) and not self.pressed.get(
+            pygame.K_LEFT) and not self.pressed.get(
+            pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
 
         # player shoot if shoot is not on cooldown
