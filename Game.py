@@ -13,11 +13,11 @@ from Enemy_pattern import *
 class Game:
     """Classe comportant tous les elements du jeu"""
 
-    def __init__(self):
+    def __init__(self, width, height):
         """Constructeur de classe"""
-        self.width = 1200
-        self.real_width = 2 * self.width / 3  # the main game screen = 900
-        self.height = 980
+        self.width = width
+        self.real_width = 3 * self.width / 4  # the main game screen
+        self.height = height
         self.player = Player(self)  # instance de joueur
         self.stats = Stats(self, self.player)  # affichage des statistiques de partie
         self.is_running = True  # si le jeu est lancé
@@ -55,8 +55,6 @@ class Game:
         self.pause_rect.x = self.width / 2 - 2 * self.pause_rect.width / 3
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
-
-
 
     def skelet(self, screen):
 

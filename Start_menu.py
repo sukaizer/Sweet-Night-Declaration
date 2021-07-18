@@ -14,15 +14,28 @@ class Start_menu:
         self.title_rect.x = game.width / 2 - self.title_rect.width / 2
         self.title_rect.y = game.height / 4
 
-        self.start = pygame.image.load('assets/buttons/button.png').convert_alpha()
-        self.start = pygame.transform.scale(self.start, (400, 400))
-        self.start_rect = self.start.get_rect()
-        self.start_rect.x = game.width / 2 - self.start_rect.width / 2
-        self.start_rect.y = game.height / 2
+        self.start1 = pygame.image.load('assets/buttons/start1.png').convert_alpha()
+        self.start1 = pygame.transform.scale(self.start1, (300, 200))
+        self.start_rect1 = self.start1.get_rect()
+        self.start_rect1.x = game.width / 2 - self.start_rect1.width / 2
+        self.start_rect1.y = game.height / 2 + 50
+
+        self.start2 = pygame.image.load('assets/buttons/start2.png').convert_alpha()
+        self.start2 = pygame.transform.scale(self.start2, (300, 200))
+        self.start_rect2 = self.start2.get_rect()
+        self.start_rect2.x = game.width / 2 - self.start_rect2.width / 2
+        self.start_rect2.y = game.height / 2 + 50
+
+        # self.start = pygame.image.load('assets/buttons/button.png').convert_alpha()
+        # self.start = pygame.transform.scale(self.start, (400, 400))
+        # self.start_rect = self.start.get_rect()
+        # self.start_rect.x = game.width / 2 - self.start_rect.width / 2
+        # self.start_rect.y = game.height / 2
+
         self.menu_repeat_music()
 
     def start_menu(self, screen):
-        screen.blit(self.start, self.start_rect)
+        screen.blit(self.start1, self.start_rect1)
         screen.blit(self.title, self.title_rect)
         for event in pygame.event.get():
             # detection de la fermeture de la fenetre
@@ -31,7 +44,7 @@ class Start_menu:
                 sys.exit()
             # détection de pression d'une touche
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if self.start_rect.collidepoint(event.pos):
+                if self.start_rect1.collidepoint(event.pos):
                     self.game.is_playing = True
                     pygame.mixer.music.stop()
                     self.game.new_game()
