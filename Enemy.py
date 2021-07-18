@@ -1,6 +1,8 @@
 import pygame
 import random
+import numpy as np
 from Enemy_bullet import *
+from Enemy_bullet_pattern import *
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -40,5 +42,12 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.remove()
 
-    def create_bullet(self, x, y, angle, v, asset):
-        self.game.all_enemy_bullets.add(EnemyBullet(self.game, x, y, angle, v, asset))
+    """
+    when giving parametric equation, you need a named argument called time,
+    for the other, you can give any number of them you want as long as you give them a name
+    """
+    def create_bullet(self, asset):
+        self.game.all_enemy_bullets.add(EnemyBullet(self.game, asset, self.f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=self.rect.x, yy=self.rect.y,  time=50))
+
+    def f1(self, a, b, xx, yy, time):
+        return xx + time*np.cos(a), yy +time*np.sin(b)

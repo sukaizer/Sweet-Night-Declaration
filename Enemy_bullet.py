@@ -4,25 +4,20 @@ import numpy as np
 
 class EnemyBullet(pygame.sprite.Sprite):
 
-    def __init__(self, game, x, y, angle, v, asset):
+    def __init__(self, game, asset, fun, **kwargs):
         super().__init__()
         self.game = game
         self.image = pygame.image.load(asset).convert_alpha()
         self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.fx = x
-        self.fy = y
-        self.angle = angle
-        print(angle)
-        self.v = v
-        self.bullet_time = 0
+        self.rect.x = 0
+        self.rect.y = 0
+        self.fun = fun
+        self.args = kwargs
 
     def move(self):
-        self.rect.x = self.fx + np.cos(self.angle) * self.v * self.bullet_time 
-        self.rect.y = self.fy + np.sin(self.angle) * self.v * self.bullet_time
-        self.bullet_time += 1
+        self.args["time"] += 20
+        self.rect.x, self.rect.y = self.fun(**self.args)
         
 
     def setAngle(self, angle):
