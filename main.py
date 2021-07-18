@@ -9,7 +9,7 @@ pygame.init()
 
 width = 1300
 height = 760
-
+pygame.mouse.set_visible(False)
 # on set la fenetre
 pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
