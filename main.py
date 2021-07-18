@@ -7,21 +7,21 @@ from Stages.Stage01 import *
 
 pygame.init()
 
-width = 1200
-height = 980
+width = 1300
+height = 760
 
 # on set la fenetre
 pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
 
-game = Stage01()
+game = Stage01(width, height)
 start = Start_menu(game)
 clock = pygame.time.Clock()
 end = End_menu(game)
 
 # image du background
 background = pygame.image.load('assets/background/background.png').convert_alpha()
-background = pygame.transform.scale(background, (1200, 980))
+background = pygame.transform.scale(background, (width, height))
 
 # boucle principale
 while game.is_running:
