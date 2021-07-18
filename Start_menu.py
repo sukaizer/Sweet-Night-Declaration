@@ -19,7 +19,7 @@ class Start_menu:
         self.start_rect1 = self.start1.get_rect()
         self.start_rect1.x = game.width / 2 - self.start_rect1.width / 2
         self.start_rect1.y = game.height / 2 + 50
-
+        # add selected variable
         self.start2 = pygame.image.load('assets/buttons/start2.png').convert_alpha()
         self.start2 = pygame.transform.scale(self.start2, (300, 200))
         self.start_rect2 = self.start2.get_rect()
