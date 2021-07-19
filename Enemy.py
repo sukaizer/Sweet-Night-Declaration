@@ -46,8 +46,6 @@ class Enemy(pygame.sprite.Sprite):
     when giving parametric equation, you need a named argument called time,
     for the other, you can give any number of them you want as long as you give them a name
     """
-    def create_bullet(self, asset):
-        self.game.all_enemy_bullets.add(EnemyBullet(self.game, asset, self.f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=self.rect.x, yy=self.rect.y,  time=50))
+    def create_bullet(self, asset, fun , **kwargs):
+        self.game.all_enemy_bullets.add(EnemyBullet(self.game, asset, fun, **kwargs))
 
-    def f1(self, a, b, xx, yy, time):
-        return xx + time*np.cos(a), yy +time*np.sin(b)

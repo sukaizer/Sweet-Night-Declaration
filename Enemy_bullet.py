@@ -16,7 +16,7 @@ class EnemyBullet(pygame.sprite.Sprite):
         self.args = kwargs
 
     def move(self):
-        self.args["time"] += 20
+        self.args["time"] += 0.1
         self.rect.x, self.rect.y = self.fun(**self.args)
         
 

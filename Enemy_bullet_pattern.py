@@ -17,6 +17,10 @@ def angle_direction(x1, y1, x2, y2):
 
 
 
+def f1(a, b, xx, yy, time):
+    return xx + 5*time*np.cos(a*time*0.01), yy + 5*time*np.sin(b*time*0.01)
+
+
 
 
 def bulletPattern0():
@@ -27,9 +31,9 @@ def bulletPattern0():
 
 def bulletpattern_player(stage, enemy, v, cooldown, asset):
     if stage.time % cooldown == 0:
-        enemy.create_bullet(asset)
+        enemy.create_bullet(asset, f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=0)
 
 def bulletpattern_circle(stage, enemy, v, qtt, asset):
     for i in range(qtt):
-        enemy.create_bullet(asset)
+        enemy.create_bullet(asset, f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=50)
         
