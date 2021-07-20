@@ -17,7 +17,7 @@ class Stage01(Game):
             for enemies in self.all_enemies:
                 simple_move(self, enemies)
                 if self.time % 80 == 0:
-                    bulletpattern_circle(self, enemies, 5, 12, 'assets/enemies/circle.png')
+                    bulletpattern_curve(enemies, 'assets/enemies/circle.png')
 
             if self.time % 80 == 0:
                 self.spawn_enemy(Little_UFO, 0, 20, 1, 0, random.randint(3, 9))
