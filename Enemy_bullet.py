@@ -20,8 +20,7 @@ class EnemyBullet(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = self.fun(**self.args)
         
 
-    def setAngle(self, angle):
-        self.angle = angle
+
 
     def remove(self):
         self.game.all_enemy_bullets.remove(self)

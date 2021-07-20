@@ -74,6 +74,9 @@ class Game:
         # deplacement bullets
         self.move_bullets()
 
+        #deplacement ennemi
+        self.move_enemies()
+
         # update joueur (deplacement, shoot)
         self.update_player(pygame_event)
 
@@ -297,10 +300,15 @@ class Game:
                     pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
 
-    def spawn_enemy(self, EnemyType, x, y, vx, vy, vel):
+    def spawn_enemy(self, EnemyType, fun, **kwargs):
         """Permet de faire apparaitre un ennemi"""
 
-        self.all_enemies.add(EnemyType(self, x, y, vx, vy, vel))
+        self.all_enemies.add(EnemyType(self, fun, **kwargs))
+
+    def move_enemies(self):
+        if not self.is_paused:
+            for enemies in self.all_enemies :
+                enemies.move()
 
     def move_bullets(self):
         if not self.is_paused:

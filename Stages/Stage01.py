@@ -5,6 +5,8 @@ from Game import *
 
 class Stage01(Game):
 
+    
+
     def __init__(self, width, height):
         super().__init__(width, height)
 
@@ -13,11 +15,13 @@ class Stage01(Game):
         self.skelet(screen)
 
     def script_0(self):
+        x1 = [0, 400, 400, 200, 200, 400, 800]
+        y1 = [100, 100, 200, 200, 100, 100, 100]
+        t1 = [0, 20, 40, 60, 80, 100, 120]
         if not self.is_paused:
             for enemies in self.all_enemies:
-                simple_move(self, enemies)
                 if self.time % 80 == 0:
                     bulletpattern_curve(enemies, 'assets/enemies/circle.png')
 
             if self.time % 80 == 0:
-                self.spawn_enemy(Little_UFO, 0, 20, 1, 0, random.randint(3, 9))
+                self.spawn_enemy(Little_UFO, lagcurve_gen, x=x1, y= y1, t=t1, time=0)
