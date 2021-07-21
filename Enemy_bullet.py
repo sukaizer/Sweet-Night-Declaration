@@ -8,7 +8,7 @@ class EnemyBullet(pygame.sprite.Sprite):
         super().__init__()
         self.game = game
         self.image = pygame.image.load(asset).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (40, 40))
+        self.image = pygame.transform.scale(self.image, (20, 20))
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0

@@ -6,6 +6,7 @@ import pygame
 from Enemy_bullet_pattern import *
 from Player import *
 from Enemy import *
+from Player import Player
 from Stats import *
 from Enemy_pattern import *
 
@@ -31,6 +32,7 @@ class Game:
         # Variables de temps
 
         self.wait_bullet_time = 2
+        self.wait_bomb_time = 200
         self.time_collision = 120
         self.wait_collision_time = self.time_collision
         self.time = 0
@@ -56,7 +58,7 @@ class Game:
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
 
-    def skelet(self, screen):
+    def main_loop(self, screen):
 
         pygame_event = pygame.event.get()
 
@@ -74,7 +76,7 @@ class Game:
         # deplacement bullets
         self.move_bullets()
 
-        #deplacement ennemi
+        # deplacement ennemi
         self.move_enemies()
 
         # update joueur (deplacement, shoot)
@@ -206,6 +208,9 @@ class Game:
             pygame.K_LEFT) and not self.pressed.get(
             pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
+        if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
+            print(self.player.time_bomb)
+            self.player.time_bomb = 0
 
         # player shoot if shoot is not on cooldown
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.player.time_bullet > self.wait_bullet_time:
@@ -215,6 +220,7 @@ class Game:
         # shoot cooldown
         if not self.is_paused:
             self.player.time_bullet += 1
+            self.player.time_bomb += 1
 
         for event in pygame_event:
             # for focus mode
@@ -307,7 +313,7 @@ class Game:
 
     def move_enemies(self):
         if not self.is_paused:
-            for enemies in self.all_enemies :
+            for enemies in self.all_enemies:
                 enemies.move()
 
     def move_bullets(self):

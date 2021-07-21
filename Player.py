@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
 
         super().__init__()
         self.game = game
-        self.nb_bomb = 0
+        self.nb_bomb = 3
         self.health = 3
         self.max_health = 3
         self.attack = 20
@@ -49,25 +49,26 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.game.height / 2
         self.hitbox = self.rect.width // 25  # rayon
         self.time_bullet = 0
+        self.time_bomb = 200
 
     def shoot(self):
         self.all_bullets.add(PlayerBullet(self, self.game, self.attack))
 
     def move_upright(self):
-        self.rect.x += self.velocity*0.7
-        self.rect.y -= self.velocity*0.7
+        self.rect.x += self.velocity * 0.7
+        self.rect.y -= self.velocity * 0.7
 
     def move_upleft(self):
-        self.rect.x -= self.velocity*0.7
-        self.rect.y -= self.velocity*0.7
+        self.rect.x -= self.velocity * 0.7
+        self.rect.y -= self.velocity * 0.7
 
     def move_downright(self):
-        self.rect.x += self.velocity*0.7
-        self.rect.y += self.velocity*0.7
+        self.rect.x += self.velocity * 0.7
+        self.rect.y += self.velocity * 0.7
 
     def move_downleft(self):
-        self.rect.x -= self.velocity*0.7
-        self.rect.y += self.velocity*0.7
+        self.rect.x -= self.velocity * 0.7
+        self.rect.y += self.velocity * 0.7
 
     def move_right(self):
         """Permet de se déplacer vers la droite"""
@@ -100,7 +101,8 @@ class Player(pygame.sprite.Sprite):
         self.velocity = self.max_velocity
 
     def check_player_collision(self):
-        if self.game.check_collision_player(self.game.all_enemies) or self.game.check_collision_player(self.game.all_enemy_bullets):
+        if self.game.check_collision_player(self.game.all_enemies) or self.game.check_collision_player(
+                self.game.all_enemy_bullets):
             self.health -= 1
             return True
         else:
@@ -109,3 +111,9 @@ class Player(pygame.sprite.Sprite):
     def place_player(self):
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
+
+    def use_bomb(self):
+        self.nb_bomb -= 1 if self.nb_bomb > 0 else self.nb_bomb
+
+    def get_bomb(self):
+        return self.nb_bomb
