@@ -24,6 +24,15 @@ def f1(a, b, xx, yy, time):
 
 
 """
+The indicator function (=1 if x is between a and b, =0 else)
+"""
+def indicator(x, a, b):
+    if x >= a and x <= b:
+        return 1
+    else:
+        return 0
+
+"""
 lagrange interpolation to generate curve passing by array of points
 - x is array for x coordinates
 - y is array for y coordinates
@@ -42,6 +51,38 @@ def lagcurve_gen(x, y, t, time):
     return xaxis, yaxis
 
 
+"""
+bezier curves
+- X is an array of triplet (x, y, t) giving the coordinates
+  speed is homogeneous on the trajectory and verified on t
+- the degree of the Bernstein polynom : 3 will be the most used one but 
+  you can put 1 to have "linear curves"
+- the current time of the object
+"""
+def bezier_curve(X, degree, time):
+    print("tim€", time)
+    N = degree + 1
+    if len(X) % N != 0:
+        return None
+    sx = 0
+    sy = 0
+    if time > X[-1][2]:
+        sx = -800
+        sy = -800
+        return sx, sy
+    tstep = 0
+    for i in range(int(len(X)/N)):
+        lim = X[N*i+degree][2] - tstep
+        normTime = (time-tstep)/lim
+        ind = indicator(time, X[N*i][2], X[N*i+degree][2])
+        tstep += X[N*i+degree][2]
+        for j in range(N):
+            jn =  np.math.factorial(degree)/(np.math.factorial(j)*np.math.factorial(degree-j))
+            bern = jn*(normTime**j)*((1-normTime)**(degree-j))
+            sx += bern*X[i*N+j][0]*ind
+            sy += bern*X[i*N+j][1]*ind
+    return sx, sy
+   
 
 
 def bulletPattern0():
@@ -53,6 +94,8 @@ def bulletPattern0():
 aa = [300, 350, 250, 300, 350, 250]
 bb = [100, 200, 300, 400, 500, 600]
 tt = [0, 5, 10, 15, 20, 25]
+
+
 
 def shift_table(tab, r):
     r = random.randint(-r, r)
