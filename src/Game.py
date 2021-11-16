@@ -47,12 +47,12 @@ class Game:
         self.walkCount = 0
         self.number_frames = 5  # toutes les X frames, une animation
 
-        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
+        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.01)
         self.SONG_END = pygame.USEREVENT + 1  # event de fin de musique
         self.song_played = False
-        self.pause = pygame.image.load('../assets/title/pause.png').convert_alpha()
+        self.pause = pygame.image.load('assets/title/pause.png').convert_alpha()
         self.pause_rect = self.pause.get_rect()  # image de pause
         self.pause_rect.x = self.width / 2 - 2 * self.pause_rect.width / 3
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
@@ -299,11 +299,11 @@ class Game:
         for event in pygame_event:
             if event.type == self.SONG_END:
                 if not self.song_played:
-                    pygame.mixer.music.load('../assets/music/stage01start.ogg')
+                    pygame.mixer.music.load('assets/music/stage01start.ogg')
                     pygame.mixer.music.play(1)
                     self.song_played = True
                 else:
-                    pygame.mixer.music.load('../assets/music/stage01repeat.ogg')
+                    pygame.mixer.music.load('assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
@@ -372,7 +372,7 @@ class Game:
         self.right = False
         self.walkCount = 0
         self.number_frames = 5  # toutes les 2 frames, une animation
-        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
+        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
         self.is_slow = False

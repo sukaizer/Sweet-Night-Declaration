@@ -20,7 +20,7 @@ clock = pygame.time.Clock()
 end = End_menu(game)
 
 # image du background
-background = pygame.image.load('../assets/background/background.png').convert_alpha()
+background = pygame.image.load('assets/background/background.png').convert_alpha()
 background = pygame.transform.scale(background, (width, height))
 
 # boucle principale

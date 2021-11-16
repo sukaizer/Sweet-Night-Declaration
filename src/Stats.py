@@ -6,9 +6,9 @@ class Stats:
     def __init__(self, game, player):
         self.player = player
         self.game = game
-        self.stats = pygame.image.load('../assets/Stats.png').convert_alpha()
+        self.stats = pygame.image.load('assets/Stats.png').convert_alpha()
         self.stats = pygame.transform.scale(self.stats, (int(self.game.width - self.game.real_width), 980))
-        self.lp = pygame.image.load('../assets/char_life.png').convert_alpha()
+        self.lp = pygame.image.load('assets/char_life.png').convert_alpha()
         self.lp = pygame.transform.scale(self.lp, (80, 80))
         self.lp_rect1 = self.lp.get_rect()
         self.lp_rect2 = self.lp.get_rect()
@@ -20,7 +20,7 @@ class Stats:
         self.lp_rect2.y = self.game.height / 2
         self.lp_rect3.y = self.game.height / 2
 
-        self.bomb = pygame.image.load('../assets/bomb.png').convert_alpha()
+        self.bomb = pygame.image.load('assets/bomb.png').convert_alpha()
         self.bomb1 = self.bomb.get_rect()
         self.bomb2 = self.bomb.get_rect()
         self.bomb3 = self.bomb.get_rect()
