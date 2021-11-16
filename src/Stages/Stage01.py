@@ -1,6 +1,6 @@
-from Enemies.Little_UFO import *
-from Enemy_bullet_pattern import *
-from Game import *
+from src.Enemies.Little_UFO import *
+from src.Enemy_bullet_pattern import *
+from src.Game import *
 
 
 class Stage01(Game):

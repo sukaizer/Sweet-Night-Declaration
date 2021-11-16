@@ -1,4 +1,4 @@
-from Enemy import *
+from src.Enemy import *
 
 class Little_UFO(Enemy):
 

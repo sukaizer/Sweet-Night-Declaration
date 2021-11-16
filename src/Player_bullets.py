@@ -8,7 +8,7 @@ class PlayerBullet(pygame.sprite.Sprite):
         self.player = player
         self.game = game
         self.velocity = 50
-        self.image = pygame.image.load("assets/bullet.png")
+        self.image = pygame.image.load("../assets/bullet.png")
         self.rect = self.image.get_rect()
         self.rect.x = player.rect.x + player.rect.width / 2 - self.rect.width/2
         self.rect.y = player.rect.y - 5
