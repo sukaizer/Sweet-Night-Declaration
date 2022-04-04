@@ -19,31 +19,49 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 8
         self.slow_velocity = 4
         self.all_bullets = pygame.sprite.Group()
-        self.image = pygame.image.load('assets/animated_sprites/d1.png')
-        self.walkRight = [pygame.image.load('assets/animated_sprites/d1.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d2.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d3.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d4.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d5.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d6.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d7.png').convert_alpha(),
-                          pygame.image.load('assets/animated_sprites/d8.png').convert_alpha()]
-        self.walkLeft = [pygame.image.load('assets/animated_sprites/g1.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g2.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g3.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g4.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g5.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g6.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g7.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/g8.png').convert_alpha()]
-        self.standing = [pygame.image.load('assets/animated_sprites/m1.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m2.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m3.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m4.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m5.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m6.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m7.png').convert_alpha(),
-                         pygame.image.load('assets/animated_sprites/m8.png').convert_alpha()]
+        self.image = pygame.image.load('../assets/animated_sprites/d1.png')
+        self.walkRight = [pygame.image.load('../assets/animated_sprites/d1.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d2.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d3.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d4.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d5.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d6.png').convert_alpha(),
+                          pygame.image.load(
+                              '../assets/animated_sprites/d7.png').convert_alpha(),
+                          pygame.image.load('../assets/animated_sprites/d8.png').convert_alpha()]
+        self.walkLeft = [pygame.image.load('../assets/animated_sprites/g1.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g2.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g3.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g4.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g5.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g6.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/g7.png').convert_alpha(),
+                         pygame.image.load('../assets/animated_sprites/g8.png').convert_alpha()]
+        self.standing = [pygame.image.load('../assets/animated_sprites/m1.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m2.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m3.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m4.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m5.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m6.png').convert_alpha(),
+                         pygame.image.load(
+                             '../assets/animated_sprites/m7.png').convert_alpha(),
+                         pygame.image.load('../assets/animated_sprites/m8.png').convert_alpha()]
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2

@@ -15,7 +15,7 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.health = 30
         self.max_health = 30
-        self.image = pygame.image.load("assets/bullet.png").convert_alpha()
+        self.image = pygame.image.load("../assets/bullet.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
@@ -45,6 +45,7 @@ class Enemy(pygame.sprite.Sprite):
     when giving parametric equation, you need a named argument called time,
     for the other, you can give any number of them you want as long as you give them a name
     """
-    def create_bullet(self, asset, fun , **kwargs):
-        self.game.all_enemy_bullets.add(EnemyBullet(self.game, asset, fun, **kwargs))
 
+    def create_bullet(self, asset, fun, **kwargs):
+        self.game.all_enemy_bullets.add(
+            EnemyBullet(self.game, asset, fun, **kwargs))

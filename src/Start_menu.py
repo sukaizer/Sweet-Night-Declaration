@@ -9,30 +9,35 @@ class Start_menu:
     def __init__(self, game):
         """Constructeur de classe"""
         self.game = game
-        self.title = pygame.image.load('assets/title/title.png').convert_alpha()
+        self.title = pygame.image.load(
+            '../assets/title/title.png').convert_alpha()
         self.title_rect = self.title.get_rect()
         self.title_rect.x = game.width / 2 - self.title_rect.width / 2
         self.title_rect.y = game.height / 4
 
-        self.start1 = pygame.image.load('assets/buttons/start1.png').convert_alpha()
+        self.start1 = pygame.image.load(
+            '../assets/buttons/start1.png').convert_alpha()
         self.start1 = pygame.transform.scale(self.start1, (300, 200))
         self.start_rect1 = self.start1.get_rect()
         self.start_rect1.x = game.width / 4 - self.start_rect1.width / 2
         self.start_rect1.y = game.height / 2 + 50
 
-        self.start2 = pygame.image.load('assets/buttons/start2.png').convert_alpha()
+        self.start2 = pygame.image.load(
+            '../assets/buttons/start2.png').convert_alpha()
         self.start2 = pygame.transform.scale(self.start2, (300, 200))
         self.start_rect2 = self.start2.get_rect()
         self.start_rect2.x = game.width / 4 - self.start_rect2.width / 2
         self.start_rect2.y = game.height / 2 + 50
 
-        self.quit1 = pygame.image.load('assets/buttons/quit1.png').convert_alpha()
+        self.quit1 = pygame.image.load(
+            '../assets/buttons/quit1.png').convert_alpha()
         self.quit1 = pygame.transform.scale(self.quit1, (300, 200))
         self.quit_rect1 = self.quit1.get_rect()
         self.quit_rect1.x = 3*game.width / 4 - self.quit_rect1.width / 2
         self.quit_rect1.y = game.height / 2 + 50
 
-        self.quit2 = pygame.image.load('assets/buttons/quit2.png').convert_alpha()
+        self.quit2 = pygame.image.load(
+            '../assets/buttons/quit2.png').convert_alpha()
         self.quit2 = pygame.transform.scale(self.quit2, (300, 200))
         self.quit_rect2 = self.quit2.get_rect()
         self.quit_rect2.x = 3*game.width / 4 - self.quit_rect2.width / 2
@@ -77,10 +82,10 @@ class Start_menu:
                     else:
                         break
             elif event.type == self.game.SONG_END:
-                pygame.mixer.music.load('assets/music/menumusicrepeat.ogg')
+                pygame.mixer.music.load('../assets/music/menumusicrepeat.ogg')
                 pygame.mixer.music.play(-1)
 
     def menu_repeat_music(self):
         pygame.mixer.music.set_endevent(self.game.SONG_END)
-        pygame.mixer.music.load('assets/music/menumusicstart.ogg')
+        pygame.mixer.music.load('../assets/music/menumusicstart.ogg')
         pygame.mixer.music.play(0)

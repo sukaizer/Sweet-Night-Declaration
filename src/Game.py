@@ -20,7 +20,8 @@ class Game:
         self.real_width = 3 * self.width / 4  # the main game screen
         self.height = height
         self.player = Player(self)  # instance de joueur
-        self.stats = Stats(self, self.player)  # affichage des statistiques de partie
+        # affichage des statistiques de partie
+        self.stats = Stats(self, self.player)
         self.is_running = True  # si le jeu est lancé
         self.is_playing = False  # si on joue
         self.is_dead = False  # si on est mort
@@ -47,12 +48,13 @@ class Game:
         self.walkCount = 0
         self.number_frames = 5  # toutes les X frames, une animation
 
-        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
+        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
         self.hitSound.set_volume(0.01)
         self.SONG_END = pygame.USEREVENT + 1  # event de fin de musique
         self.song_played = False
-        self.pause = pygame.image.load('assets/title/pause.png').convert_alpha()
+        self.pause = pygame.image.load(
+            '../assets/title/pause.png').convert_alpha()
         self.pause_rect = self.pause.get_rect()  # image de pause
         self.pause_rect.x = self.width / 2 - 2 * self.pause_rect.width / 3
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
@@ -182,16 +184,16 @@ class Game:
 
         # update the position of the player when inputs detected
         elif not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
-                pygame.K_LEFT) and not self.pressed.get(
-            pygame.K_UP) and not self.pressed.get(
-            pygame.K_DOWN) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
+            pygame.K_LEFT) and not self.pressed.get(
+                pygame.K_UP) and not self.pressed.get(
+                pygame.K_DOWN) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
             self.left = False
             self.right = True
         elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and not self.pressed.get(
-                pygame.K_RIGHT) and not self.pressed.get(
-            pygame.K_UP) and not self.pressed.get(
-            pygame.K_DOWN) and self.player.rect.x > 0:
+            pygame.K_RIGHT) and not self.pressed.get(
+                pygame.K_UP) and not self.pressed.get(
+                pygame.K_DOWN) and self.player.rect.x > 0:
             self.player.move_left()
             self.left = True
             self.right = False
@@ -199,14 +201,14 @@ class Game:
             self.left = False
             self.right = False
         if not self.is_paused and self.pressed.get(pygame.K_UP) and not self.pressed.get(
-                pygame.K_DOWN) and not self.pressed.get(
-            pygame.K_LEFT) and not self.pressed.get(
-            pygame.K_RIGHT) and self.player.rect.y > 0:
+            pygame.K_DOWN) and not self.pressed.get(
+                pygame.K_LEFT) and not self.pressed.get(
+                pygame.K_RIGHT) and self.player.rect.y > 0:
             self.player.move_up()
         elif not self.is_paused and self.pressed.get(pygame.K_DOWN) and not self.pressed.get(
-                pygame.K_UP) and not self.pressed.get(
-            pygame.K_LEFT) and not self.pressed.get(
-            pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
+            pygame.K_UP) and not self.pressed.get(
+                pygame.K_LEFT) and not self.pressed.get(
+                pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
         if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
             print(self.player.time_bomb)
@@ -262,29 +264,35 @@ class Game:
         if self.is_immune:
             if self.immune_count % 2 == 0:
                 if self.left:
-                    screen.blit(self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
+                    screen.blit(
+                        self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
                     self.walkCount += 1
                 elif self.right:
-                    screen.blit(self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
+                    screen.blit(
+                        self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
                     self.walkCount += 1
                 else:
-                    screen.blit(self.player.standing[self.walkCount // self.number_frames], self.player.rect)
+                    screen.blit(
+                        self.player.standing[self.walkCount // self.number_frames], self.player.rect)
                     self.walkCount += 1
         else:
             if self.left:
-                screen.blit(self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
+                screen.blit(
+                    self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
                 self.walkCount += 1
             elif self.right:
-                screen.blit(self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
+                screen.blit(
+                    self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
                 self.walkCount += 1
             else:
-                screen.blit(self.player.standing[self.walkCount // self.number_frames], self.player.rect)
+                screen.blit(
+                    self.player.standing[self.walkCount // self.number_frames], self.player.rect)
                 self.walkCount += 1
 
         if self.is_slow:
             pygame.draw.circle(screen, (0, 255, 0, 0.1), (
                 self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
-                               self.player.hitbox + 7)
+                self.player.hitbox + 7)
         if self.walkCount >= self.number_frames * len(self.player.walkLeft):
             self.walkCount = 0
 
@@ -299,11 +307,12 @@ class Game:
         for event in pygame_event:
             if event.type == self.SONG_END:
                 if not self.song_played:
-                    pygame.mixer.music.load('assets/music/stage01start.ogg')
+                    pygame.mixer.music.load('../assets/music/stage01start.ogg')
                     pygame.mixer.music.play(1)
                     self.song_played = True
                 else:
-                    pygame.mixer.music.load('assets/music/stage01repeat.ogg')
+                    pygame.mixer.music.load(
+                        '../assets/music/stage01repeat.ogg')
                     pygame.mixer.music.play(1)
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
@@ -372,7 +381,7 @@ class Game:
         self.right = False
         self.walkCount = 0
         self.number_frames = 5  # toutes les 2 frames, une animation
-        self.bulletSound = pygame.mixer.Sound('assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('assets/sound/damage.wav')
+        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
+        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
         self.hitSound.set_volume(0.05)
         self.is_slow = False
