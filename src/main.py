@@ -10,7 +10,7 @@ pygame.init()
 width = 1300
 height = 760
 pygame.mouse.set_visible(False)
-# on set la fenetre
+# window setting
 pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
 
@@ -19,20 +19,24 @@ start = Start_menu(game)
 clock = pygame.time.Clock()
 end = End_menu(game)
 
-# image du background
+# background image
 background = pygame.image.load(
     '../assets/background/background.png').convert_alpha()
 background = pygame.transform.scale(background, (width, height))
 
-# boucle principale
+# TODO variable with current level instead of level01 right away
+# TODO variable with music volume and effects volume
+# TODO class for sounds (music and sound effects)
+
+# main loop
 while game.is_running:
 
     screen.blit(background, (0, 0))
     clock.tick(60)
-    # boucle de jeu
+    # game loop
     if game.is_playing and not game.is_dead:
         game.update(screen)
-    # boucle du menu
+    # menu
     elif not game.is_playing and not game.is_dead:
         start.start_menu(screen)
     else:

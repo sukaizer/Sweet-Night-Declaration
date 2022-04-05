@@ -9,8 +9,8 @@ class Stage01(Game):
         super().__init__(width, height)
 
     def update(self, screen):
-        self.script_0()
-        self.main_loop(screen)
+        self.script_0()  # spawn enemies
+        self.main_loop(screen)  # update everything on screen
 
     def script_0(self):
         poingne = [(0, 100, 0), (400, 100, 10), (400, 800, 11), (800, 200, 80),

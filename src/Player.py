@@ -4,10 +4,10 @@ from Player_bullets import *
 
 
 class Player(pygame.sprite.Sprite):
-    """Classe représentant le joueur"""
+    """Class representing the player"""
 
     def __init__(self, game):
-        """Constructeur de classe"""
+        """Class constructor"""
 
         super().__init__()
         self.game = game
@@ -17,8 +17,15 @@ class Player(pygame.sprite.Sprite):
         self.attack = 20
         self.max_velocity = 8  # pixels
         self.velocity = 8
-        self.slow_velocity = 4
+        self.slow_velocity = 4  # velocity with key pressed
         self.all_bullets = pygame.sprite.Group()
+        self.import_assets()
+        self.hitbox = self.rect.width // 25  # rayon
+        self.time_bullet = 0
+        self.time_bomb = 200
+
+    def import_assets(self):
+        """import all assets"""
         self.image = pygame.image.load('../assets/animated_sprites/d1.png')
         self.walkRight = [pygame.image.load('../assets/animated_sprites/d1.png').convert_alpha(),
                           pygame.image.load(
@@ -65,60 +72,62 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
-        self.hitbox = self.rect.width // 25  # rayon
-        self.time_bullet = 0
-        self.time_bomb = 200
 
     def shoot(self):
         self.all_bullets.add(PlayerBullet(self, self.game, self.attack))
 
     def move_upright(self):
+        """Up Right movement"""
         self.rect.x += self.velocity * 0.7
         self.rect.y -= self.velocity * 0.7
 
     def move_upleft(self):
+        """Up Left movement"""
         self.rect.x -= self.velocity * 0.7
         self.rect.y -= self.velocity * 0.7
 
     def move_downright(self):
+        """Down Right movement"""
         self.rect.x += self.velocity * 0.7
         self.rect.y += self.velocity * 0.7
 
     def move_downleft(self):
+        """Down Left movement"""
         self.rect.x -= self.velocity * 0.7
         self.rect.y += self.velocity * 0.7
 
     def move_right(self):
-        """Permet de se déplacer vers la droite"""
+        """Right movement"""
 
         self.rect.x += self.velocity
 
     def move_left(self):
-        """Permet de se déplacer vers la gauche"""
+        """Left movement"""
 
         self.rect.x -= self.velocity
 
     def move_up(self):
-        """Permet de se déplacer vers le haut"""
+        """Up movement"""
 
         self.rect.y -= self.velocity
 
     def move_down(self):
-        """Permet de se déplacer vers le bas"""
+        """Down movement"""
 
         self.rect.y += self.velocity
 
     def slow_player(self):
-        """Ralentit le joueur pour permettre plus de précision"""
+        """Slows the player by modifing velocity"""
 
         self.velocity = self.slow_velocity
 
     def normal_velocity(self):
-        """Redonne au joueur sa vitesse de base"""
+        """Re initializes base velocity"""
 
         self.velocity = self.max_velocity
 
     def check_player_collision(self):
+        """checks all collisions between player and sprites"""
         if self.game.check_collision_player(self.game.all_enemies) or self.game.check_collision_player(
                 self.game.all_enemy_bullets):
             self.health -= 1
@@ -127,6 +136,7 @@ class Player(pygame.sprite.Sprite):
             return False
 
     def place_player(self):
+        """sets base position"""
         self.rect.x = self.game.real_width / 2
         self.rect.y = self.game.height / 2
 

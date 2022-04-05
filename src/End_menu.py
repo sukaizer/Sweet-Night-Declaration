@@ -5,54 +5,59 @@ from Enemy import *
 
 
 class End_menu:
-    """Classe qui représente le menu d'accueil du jeu"""
+    """Class representing the death menu"""
 
     def __init__(self, game):
         """Constructeur de classe"""
         self.game = game
+        self.import_assets()
+        self.selected = 0
+        self.music_is_playing = False
+
+    def import_assets(self):
         self.title = pygame.image.load(
             '../assets/title/game_over.png').convert_alpha()
         self.title = pygame.transform.scale(self.title, (740, 200))
         self.title_rect = self.title.get_rect()
-        self.title_rect.x = game.width / 2 - self.title_rect.width / 2
-        self.title_rect.y = game.height / 6
+        self.title_rect.x = self.game.width / 2 - self.title_rect.width / 2
+        self.title_rect.y = self.game.height / 6
 
         self.restart1 = pygame.image.load(
             '../assets/buttons/restart1.png').convert_alpha()
         self.restart1 = pygame.transform.scale(self.restart1, (300, 200))
         self.restart_rect1 = self.restart1.get_rect()
         self.restart_rect1.x = self.restart_rect1.width / 2
-        self.restart_rect1.y = game.height / 2
+        self.restart_rect1.y = self.game.height / 2
 
         self.restart2 = pygame.image.load(
             '../assets/buttons/restart2.png').convert_alpha()
         self.restart2 = pygame.transform.scale(self.restart2, (300, 200))
         self.restart_rect2 = self.restart2.get_rect()
         self.restart_rect2.x = self.restart_rect2.width / 2
-        self.restart_rect2.y = game.height / 2
+        self.restart_rect2.y = self.game.height / 2
 
         self.menu1 = pygame.image.load(
             '../assets/buttons/menu1.png').convert_alpha()
         self.menu1 = pygame.transform.scale(self.menu1, (300, 200))
         self.menu_rect1 = self.menu1.get_rect()
-        self.menu_rect1.x = game.width - 3 * self.menu_rect1.width / 2
-        self.menu_rect1.y = game.height / 2
+        self.menu_rect1.x = self.game.width - 3 * self.menu_rect1.width / 2
+        self.menu_rect1.y = self.game.height / 2
 
         self.menu2 = pygame.image.load(
             '../assets/buttons/menu2.png').convert_alpha()
         self.menu2 = pygame.transform.scale(self.menu2, (300, 200))
         self.menu_rect2 = self.menu2.get_rect()
-        self.menu_rect2.x = game.width - 3 * self.menu_rect2.width / 2
-        self.menu_rect2.y = game.height / 2
-        self.selected = 0
-        self.music_is_playing = False
+        self.menu_rect2.x = self.game.width - 3 * self.menu_rect2.width / 2
+        self.menu_rect2.y = self.game.height / 2
 
     def end_menu(self, screen):
+        """makes all updates within the startmenu"""
         if not self.music_is_playing:
             pygame.mixer.music.load('../assets/music/deathscreenv2.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(0.3)
             self.music_is_playing = True
+
         self.game.all_enemies.empty()
         screen.blit(self.title, self.title_rect)
         if self.selected == 0:

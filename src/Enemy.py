@@ -6,10 +6,10 @@ from Enemy_bullet_pattern import *
 
 
 class Enemy(pygame.sprite.Sprite):
-    """Classe représentant les ennemis"""
+    """Class representing all enemies"""
 
     def __init__(self, game, fun, **kwargs):
-        """Constructeur de classe"""
+        """Class constructor"""
 
         super().__init__()
         self.game = game
@@ -27,7 +27,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = self.fun(**self.args)
 
     def remove(self):
-        """Enlève l'ennemi (self) du groupe d'ennemis"""
+        """removes the current enemy from the group"""
         self.game.all_enemies.remove(self)
 
     def set_move(self, vx, vy, velocity):
@@ -41,11 +41,8 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.remove()
 
-    """
-    when giving parametric equation, you need a named argument called time,
-    for the other, you can give any number of them you want as long as you give them a name
-    """
-
     def create_bullet(self, asset, fun, **kwargs):
+        """when giving parametric equation, you need a named argument called time,
+        for the other, you can give any number of them you want as long as you give them a name"""
         self.game.all_enemy_bullets.add(
             EnemyBullet(self.game, asset, fun, **kwargs))

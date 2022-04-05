@@ -4,8 +4,13 @@ import pygame
 class Stats:
 
     def __init__(self, game, player):
+        """Class constructor"""
         self.player = player
         self.game = game
+        self.import_assets()
+
+    def import_assets(self):
+        """import all assets"""
         self.stats = pygame.image.load('../assets/Stats.png').convert_alpha()
         self.stats = pygame.transform.scale(
             self.stats, (int(self.game.width - self.game.real_width), 980))
