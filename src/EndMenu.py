@@ -2,9 +2,10 @@ import sys
 import pygame
 from Player import *
 from Enemy import *
+from Music import *
 
 
-class End_menu:
+class EndMenu:
     """Class representing the death menu"""
 
     def __init__(self, game):
@@ -13,6 +14,8 @@ class End_menu:
         self.import_assets()
         self.selected = 0
         self.music_is_playing = False
+        self.end_music = Music(
+            '../assets/music/deathscreenv2.ogg', self.game.music_volume)
 
     def import_assets(self):
         self.title = pygame.image.load(
@@ -53,9 +56,7 @@ class End_menu:
     def end_menu(self, screen):
         """makes all updates within the startmenu"""
         if not self.music_is_playing:
-            pygame.mixer.music.load('../assets/music/deathscreenv2.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(0.3)
+            self.end_music.play(-1)
             self.music_is_playing = True
 
         self.game.all_enemies.empty()

@@ -1,9 +1,12 @@
+import sys
 import pygame
 from Player import *
 from Enemy import *
+from Stages.StageScripts import *
+from Music import *
 
 
-class Start_menu:
+class StartMenu:
     """Start Menu of the game"""
 
     def __init__(self, game):
@@ -11,6 +14,8 @@ class Start_menu:
         self.game = game
         self.import_assets()
         self.selected = 0
+        self.start_music = Music(
+            '../assets/music/menumusicstart.ogg', self.game.music_volume)
         self.menu_repeat_music()
 
     def import_assets(self):
@@ -85,13 +90,9 @@ class Start_menu:
                     else:
                         break
             elif event.type == self.game.SONG_END:
-                pygame.mixer.music.load('../assets/music/menumusicrepeat.ogg')
-                pygame.mixer.music.set_volume(0.01)
-                pygame.mixer.music.play(-1)
+                self.start_music.play(-1)
 
     def menu_repeat_music(self):
         """loops the music"""
-        pygame.mixer.music.set_endevent(self.game.SONG_END)
-        pygame.mixer.music.load('../assets/music/menumusicstart.ogg')
-        pygame.mixer.music.set_volume(0.01)
-        pygame.mixer.music.play(0)
+        self.start_music.set_endevent(self.game.SONG_END)
+        self.start_music.play(0)

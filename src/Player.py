@@ -1,6 +1,6 @@
 import pygame
 from Game import *
-from Player_bullets import *
+from PlayerBullet import *
 
 
 class Player(pygame.sprite.Sprite):

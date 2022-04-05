@@ -19,6 +19,8 @@ def angle_direction(x1, y1, x2, y2):
 """
 param equations
 """
+
+
 def f1(a, b, xx, yy, time):
     return xx + 5*time*np.cos(a*time*0.01), yy + 5*time*np.sin(b*time*0.01)
 
@@ -26,11 +28,14 @@ def f1(a, b, xx, yy, time):
 """
 The indicator function (=1 if x is between a and b, =0 else)
 """
+
+
 def indicator(x, a, b):
     if x >= a and x <= b:
         return 1
     else:
         return 0
+
 
 """
 lagrange interpolation to generate curve passing by array of points
@@ -38,6 +43,8 @@ lagrange interpolation to generate curve passing by array of points
 - y is array for y coordinates
 - t is array to indicate the time the curve reach each coordinate 
 """
+
+
 def lagcurve_gen(x, y, t, time):
     poly = np.ones(len(x))
     xaxis = 0
@@ -59,8 +66,10 @@ bezier curves
   you can put 1 to have "linear curves"
 - the current time of the object
 """
+
+
 def bezier_curve(X, degree, time):
-    print("tim€", time)
+    #print("tim€", time)
     N = degree + 1
     if len(X) % N != 0:
         return None
@@ -77,12 +86,12 @@ def bezier_curve(X, degree, time):
         ind = indicator(time, X[N*i][2], X[N*i+degree][2])
         tstep += X[N*i+degree][2]
         for j in range(N):
-            jn =  np.math.factorial(degree)/(np.math.factorial(j)*np.math.factorial(degree-j))
+            jn = np.math.factorial(
+                degree)/(np.math.factorial(j)*np.math.factorial(degree-j))
             bern = jn*(normTime**j)*((1-normTime)**(degree-j))
             sx += bern*X[i*N+j][0]*ind
             sy += bern*X[i*N+j][1]*ind
     return sx, sy
-   
 
 
 def bulletPattern0():
@@ -96,7 +105,6 @@ bb = [100, 200, 300, 400, 500, 600]
 tt = [0, 5, 10, 15, 20, 25]
 
 
-
 def shift_table(tab, r):
     r = random.randint(-r, r)
     newTab = []
@@ -107,12 +115,16 @@ def shift_table(tab, r):
 
 def bulletpattern_player(stage, enemy, v, cooldown, asset):
     if stage.time % cooldown == 0:
-        enemy.create_bullet(asset, f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=0)
+        enemy.create_bullet(asset, f1, a=random.random(
+        ) * 2 * np.pi, b=random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=0)
+
 
 def bulletpattern_circle(stage, enemy, v, qtt, asset):
     for i in range(qtt):
-        enemy.create_bullet(asset, f1, a= random.random() * 2 * np.pi, b= random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=0)
-        
-        
+        enemy.create_bullet(asset, f1, a=random.random(
+        ) * 2 * np.pi, b=random.random() * 2 * np.pi, xx=enemy.rect.x, yy=enemy.rect.y,  time=0)
+
+
 def bulletpattern_curve(enemy, asset):
-    enemy.create_bullet(asset, lagcurve_gen, x=shift_table(aa,250), y= bb, t=tt, time=0)
+    enemy.create_bullet(asset, lagcurve_gen, x=shift_table(
+        aa, 250), y=bb, t=tt, time=0)

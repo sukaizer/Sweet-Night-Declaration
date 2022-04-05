@@ -1,9 +1,9 @@
 import sys
 import pygame
 from Game import *
-from Start_menu import *
-from End_menu import *
-from Stages.Stage01 import *
+from StartMenu import *
+from EndMenu import *
+from Stages.StageScripts import *
 
 pygame.init()
 
@@ -14,10 +14,10 @@ pygame.mouse.set_visible(False)
 pygame.display.set_caption("Sweet Night Declaration")
 screen = pygame.display.set_mode((width, height))
 
-game = Stage01(width, height)
-start = Start_menu(game)
+game = Game(width, height)
+start = StartMenu(game)
 clock = pygame.time.Clock()
-end = End_menu(game)
+end = EndMenu(game)
 
 # background image
 background = pygame.image.load(

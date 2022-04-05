@@ -3,12 +3,16 @@ import sys
 import numpy
 import pygame
 
-from Enemy_bullet_pattern import *
+from Sound import *
+from Music import *
+from EnemyBulletPattern import *
 from Player import *
 from Enemy import *
 from Player import Player
 from Stats import *
-from Enemy_pattern import *
+from EnemyPattern import *
+
+from Stages.StageScripts import *
 
 
 class Game:
@@ -23,6 +27,7 @@ class Game:
         self.player = Player(self)  # player instance
         # game stats display
         self.stats = Stats(self, self.player)
+        self.level = 0  # load script, first level by default
         self.is_running = True  # game is launched
         self.is_playing = False  # game is being played
         self.is_dead = False  # player is dead
@@ -49,11 +54,19 @@ class Game:
         self.walkCount = 0
         self.number_frames = 10  # an animation every X frames
 
-        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
-        self.hitSound.set_volume(0.01)
+        self.sound_volume = 1
+        self.music_volume = 1
+        self.bulletSound = Sound(
+            '../assets/sound/attack.wav', self.sound_volume)
+        self.hitSound = Sound(
+            '../assets/sound/damage.wav', self.sound_volume/5)
+        self.debut_music = Music(
+            '../assets/music/stage01start.ogg', self.music_volume)
+        self.loop_music = Music(
+            '../assets/music/stage01repeat.ogg', self.music_volume)
         self.SONG_END = pygame.USEREVENT + 1  # end of music event
         self.song_played = False
+
         self.pause = pygame.image.load(
             '../assets/title/pause.png').convert_alpha()
         self.pause_rect = self.pause.get_rect()  # pause image
@@ -212,7 +225,7 @@ class Game:
                 pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
         if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
-            print(self.player.time_bomb)
+            # print(self.player.time_bomb)
             self.player.time_bomb = 0
 
         # player shoot if shoot is not on cooldown
@@ -299,7 +312,7 @@ class Game:
             self.walkCount = 0
 
     def closing_detection(self, pygame_event):
-        """detection de la fermeture de la fenetre"""
+        """closing window detection"""
         for event in pygame_event:
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -310,13 +323,10 @@ class Game:
         for event in pygame_event:
             if event.type == self.SONG_END:
                 if not self.song_played:
-                    pygame.mixer.music.load('../assets/music/stage01start.ogg')
-                    pygame.mixer.music.play(1)
+                    self.debut_music.play(1)
                     self.song_played = True
                 else:
-                    pygame.mixer.music.load(
-                        '../assets/music/stage01repeat.ogg')
-                    pygame.mixer.music.play(1)
+                    self.loop_music.play(1)
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
         """Spawns an ennemy, considering a specific enemy and his movement function"""
@@ -392,7 +402,13 @@ class Game:
 
         self.walkCount = 0
         self.number_frames = 10  # an animation every X frames
-        self.bulletSound = pygame.mixer.Sound('../assets/sound/attack.wav')
-        self.hitSound = pygame.mixer.Sound('../assets/sound/damage.wav')
-        self.hitSound.set_volume(0.05)
+        self.bulletSound = Sound(
+            '../assets/sound/attack.wav', self.sound_volume)
+        self.hitSound = Sound(
+            '../assets/sound/damage.wav', self.sound_volume/5)
         self.is_slow = False
+
+    def update(self, screen):
+        """make all updates considering the loaded level (script)"""
+        scripts[self.level](self)
+        self.main_loop(screen)  # update everything on screen

@@ -1,8 +1,8 @@
 import pygame
 import random
 import numpy as np
-from Enemy_bullet import *
-from Enemy_bullet_pattern import *
+from EnemyBullet import *
+from EnemyBulletPattern import *
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -36,6 +36,7 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = velocity
 
     def damage(self, amount):
+        # the sound is very loud !
         self.game.hitSound.play()
         self.health -= amount
         if self.health <= 0:
