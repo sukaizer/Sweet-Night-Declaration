@@ -13,6 +13,7 @@ from Stats import *
 from EnemyPattern import *
 
 from Stages.StageScripts import *
+from musics import *
 
 
 class Game:
@@ -61,9 +62,9 @@ class Game:
         self.hitSound = Sound(
             '../assets/sound/damage.wav', self.sound_volume/5)
         self.debut_music = Music(
-            '../assets/music/stage01start.ogg', self.music_volume)
+            debut_music, self.music_volume)
         self.loop_music = Music(
-            '../assets/music/stage01repeat.ogg', self.music_volume)
+            loop_music, self.music_volume)
         self.SONG_END = pygame.USEREVENT + 1  # end of music event
         self.song_played = False
 
