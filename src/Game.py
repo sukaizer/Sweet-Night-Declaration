@@ -403,10 +403,10 @@ class Game:
     def load_bomb_sprites(self):
         self.bomb_sprites = []
         self.bomb_rect = pygame.transform.scale(pygame.image.load(
-            '../assets/explosion/explosion_0.png'),(613,625)).get_rect()
+            '../assets/explosion/explosion_0.png'),(797,813)).get_rect()
         for i in range(self.max_bomb_frames):
             self.bomb_sprites.append(pygame.transform.scale(pygame.image.load(
-                '../assets/explosion/explosion_'+str(i)+'.png').convert_alpha(),(613,625)))
+                '../assets/explosion/explosion_'+str(i)+'.png').convert_alpha(),(797,813)))
 
     def animate_bomb(self, screen):
         screen.blit(
