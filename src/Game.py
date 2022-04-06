@@ -44,7 +44,7 @@ class Game:
         # time variables
 
         self.wait_bullet_time = 2
-        self.wait_bomb_time = 200
+        self.wait_bomb_time = 60
         self.time_collision = 120
         self.wait_collision_time = self.time_collision
         self.time = 0
@@ -62,8 +62,10 @@ class Game:
         self.music_volume = 1
         self.init_sounds()
 
+        self.max_bomb_frames = 53
+        self.bomb_frame = self.max_bomb_frames
         self.load_bomb_sprites()
-        self.bomb_frame = 130
+
 
         # self.font = "Herculanum"
         self.font = "../assets/fonts/font0.ttf"
@@ -129,7 +131,7 @@ class Game:
 
         self.remove_bullet_collision()
 
-        if self.bomb_frame <= 129:
+        if self.bomb_frame < self.max_bomb_frames:
             self.animate_bomb(screen)
 
         self.draw_pause_screen(screen)
@@ -232,7 +234,7 @@ class Game:
         if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
             print(self.player.time_bomb)
             if self.player.use_bomb():
-                if self.bomb_frame == 130:
+                if self.bomb_frame == self.max_bomb_frames:
                     self.bomb_frame = 0
                     (self.w_bomb_anim, self.h_bomb_anim) = (
                         (self.player.rect.left + self.player.rect.width/2) - self.bomb_rect.width / 2, (self.player.rect.top + self.player.rect.height/2) - self.bomb_rect.height / 2)
@@ -307,7 +309,7 @@ class Game:
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
         """Spawns an ennemy, considering a specific enemy and his movement function"""
-        if self.bomb_frame == 130:
+        if self.bomb_frame == self.max_bomb_frames:
             EnemyType(self, fun, **kwargs).add()
 
     def spawn_emitter(self, Emitter, fun, **kwargs):
@@ -400,11 +402,11 @@ class Game:
 
     def load_bomb_sprites(self):
         self.bomb_sprites = []
-        self.bomb_rect = pygame.image.load(
-            '../assets/bomb/explosion/explosion_0.png').get_rect()
-        for i in range(130):
-            self.bomb_sprites.append(pygame.image.load(
-                '../assets/bomb/explosion/explosion_'+str(i)+'.png').convert_alpha())
+        self.bomb_rect = pygame.transform.scale(pygame.image.load(
+            '../assets/explosion/explosion_0.png'),(613,625)).get_rect()
+        for i in range(self.max_bomb_frames):
+            self.bomb_sprites.append(pygame.transform.scale(pygame.image.load(
+                '../assets/explosion/explosion_'+str(i)+'.png').convert_alpha(),(613,625)))
 
     def animate_bomb(self, screen):
         screen.blit(
