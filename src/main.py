@@ -26,7 +26,6 @@ background = pygame.image.load(
     '../assets/background/background.png').convert_alpha()
 background = pygame.transform.scale(background, (width, height))
 
-
 # main loop
 while game.is_running:
 

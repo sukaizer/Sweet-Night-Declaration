@@ -1,3 +1,5 @@
+import time
+from pygame.locals import*
 import sys
 
 import numpy
@@ -56,7 +58,12 @@ class Game:
         self.walkCount = 0
         self.number_frames = 10  # an animation every X frames
 
+        self.sound_volume = 1
+        self.music_volume = 1
         self.init_sounds()
+
+        self.load_bomb_sprites()
+        self.bomb_frame = 130
 
         # self.font = "Herculanum"
         self.font = "../assets/fonts/font0.ttf"
@@ -70,8 +77,6 @@ class Game:
 
     def init_sounds(self):
         """initializes sounds and musics variables"""
-        self.sound_volume = 1
-        self.music_volume = 1
 
         self.bullet_sound = Sound(
             '../assets/sound/attack.wav', self.sound_volume)
@@ -123,6 +128,9 @@ class Game:
         self.update_player(pygame_event)
 
         self.remove_bullet_collision()
+
+        if self.bomb_frame <= 129:
+            self.animate_bomb(screen)
 
         self.draw_pause_screen(screen)
 
@@ -224,6 +232,10 @@ class Game:
         if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
             print(self.player.time_bomb)
             if self.player.use_bomb():
+                if self.bomb_frame == 130:
+                    self.bomb_frame = 0
+                    (self.w_bomb_anim, self.h_bomb_anim) = (
+                        (self.player.rect.left + self.player.rect.width/2) - self.bomb_rect.width / 2, (self.player.rect.top + self.player.rect.height/2) - self.bomb_rect.height / 2)
                 self.player.time_bomb = 0
                 self.all_emitters.empty()
                 self.all_enemies.empty()
@@ -295,7 +307,8 @@ class Game:
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
         """Spawns an ennemy, considering a specific enemy and his movement function"""
-        EnemyType(self, fun, **kwargs).add()
+        if self.bomb_frame == 130:
+            EnemyType(self, fun, **kwargs).add()
 
     def spawn_emitter(self, Emitter, fun, **kwargs):
         self.all_emitters.append(Emitter(self, fun, **kwargs))
@@ -384,3 +397,16 @@ class Game:
 
         for music in self.musics:
             music.set_volume(self.music_volume)
+
+    def load_bomb_sprites(self):
+        self.bomb_sprites = []
+        self.bomb_rect = pygame.image.load(
+            '../assets/bomb/explosion/explosion_0.png').get_rect()
+        for i in range(130):
+            self.bomb_sprites.append(pygame.image.load(
+                '../assets/bomb/explosion/explosion_'+str(i)+'.png').convert_alpha())
+
+    def animate_bomb(self, screen):
+        screen.blit(
+            self.bomb_sprites[self.bomb_frame], (self.w_bomb_anim, self.h_bomb_anim))
+        self.bomb_frame += 1
