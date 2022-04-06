@@ -31,8 +31,10 @@ class Game:
         self.level = 0  # load script, first level by default
         self.is_running = True  # game is launched
         self.is_playing = False  # game is being played
+        self.in_options = False
         self.is_dead = False  # player is dead
         self.all_enemies = pygame.sprite.Group()  # sprite group with enemies
+        self.all_emitters = pygame.sprite.Group()
         self.all_enemy_bullets = pygame.sprite.Group()
         self.pressed = {}  # dictionnary of pressed keys
 
@@ -57,10 +59,10 @@ class Game:
 
         self.sound_volume = 1
         self.music_volume = 1
-        self.bulletSound = Sound(
+        self.bullet_sound = Sound(
             '../assets/sound/attack.wav', self.sound_volume)
-        self.hitSound = Sound(
-            '../assets/sound/damage.wav', self.sound_volume/5)
+        self.hit_sound = Sound(
+            '../assets/sound/damage.wav', self.sound_volume)
         self.debut_music = Music(
             debut_music, self.music_volume)
         self.loop_music = Music(
@@ -231,7 +233,7 @@ class Game:
 
         # player shoot if shoot is not on cooldown
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.player.time_bullet > self.wait_bullet_time:
-            self.bulletSound.play()
+            self.bullet_sound.play()
             self.player.shoot()
             self.player.time_bullet = 0
         # shoot cooldown
@@ -331,8 +333,10 @@ class Game:
 
     def spawn_enemy(self, EnemyType, fun, **kwargs):
         """Spawns an ennemy, considering a specific enemy and his movement function"""
+        EnemyType(self, fun, **kwargs).add()
 
-        self.all_enemies.add(EnemyType(self, fun, **kwargs))
+    def spawn_emitter(self, Emitter, fun, **kwargs):
+        self.all_emitters.append(Emitter(self, fun, **kwargs))
 
     def move_enemies(self):
         """updates enemies position"""
@@ -389,6 +393,7 @@ class Game:
         self.player = Player(self)  # initialize player
         self.stats = Stats(self, self.player)
         self.all_enemies = pygame.sprite.Group()
+        self.all_emitters = pygame.sprite.Group()
         self.all_enemy_bullets = pygame.sprite.Group()
         self.pressed = {}  # dictionnary of pressed keys
         self.player.time_bullet = 0
@@ -403,13 +408,18 @@ class Game:
 
         self.walkCount = 0
         self.number_frames = 10  # an animation every X frames
-        self.bulletSound = Sound(
+        self.bullet_sound = Sound(
             '../assets/sound/attack.wav', self.sound_volume)
-        self.hitSound = Sound(
-            '../assets/sound/damage.wav', self.sound_volume/5)
+        self.hit_sound = Sound(
+            '../assets/sound/damage.wav', self.sound_volume)
         self.is_slow = False
 
     def update(self, screen):
         """make all updates considering the loaded level (script)"""
         scripts[self.level](self)
         self.main_loop(screen)  # update everything on screen
+
+    def update_volume(self):
+        pygame.mixer.music.set_volume(self.music_volume)
+        self.bullet_sound.set_volume(self.sound_volume)
+        self.hit_sound.set_volume(self.sound_volume)

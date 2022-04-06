@@ -1,4 +1,5 @@
 import sys
+from OptionsMenu import OptionsMenu
 import pygame
 from Game import *
 from StartMenu import *
@@ -16,6 +17,7 @@ screen = pygame.display.set_mode((width, height))
 
 game = Game(width, height)
 start = StartMenu(game)
+options = OptionsMenu(game)
 clock = pygame.time.Clock()
 end = EndMenu(game)
 
@@ -34,11 +36,13 @@ while game.is_running:
     screen.blit(background, (0, 0))
     clock.tick(60)
     # game loop
-    if game.is_playing and not game.is_dead:
+    if game.is_playing and not game.is_dead and not game.in_options:
         game.update(screen)
     # menu
-    elif not game.is_playing and not game.is_dead:
+    elif not game.is_playing and not game.is_dead and not game.in_options:
         start.start_menu(screen)
+    elif not game.is_playing and not game.is_dead and game.in_options:
+        options.options_menu(screen)
     else:
         end.end_menu(screen)
 

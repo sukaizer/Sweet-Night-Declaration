@@ -17,6 +17,10 @@ class StartMenu:
         self.start_music = Music(
             '../assets/music/menumusicstart.ogg', self.game.music_volume)
         self.menu_repeat_music()
+        pygame.font.init()
+        self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
+        self.text1 = self.myfont.render('Options', False, (0, 0, 0))
+        self.text2 = self.myfont.render('Options', False, (255, 0, 0))
 
     def import_assets(self):
         """import all assets"""
@@ -60,9 +64,18 @@ class StartMenu:
 
         if self.selected == 0:
             screen.blit(self.start2, self.start_rect2)
+            screen.blit(self.text1,
+                        (self.game.width / 2, 2*self.game.height / 3))
+            screen.blit(self.quit1, self.quit_rect1)
+        elif self.selected == 1:
+            screen.blit(self.start1, self.start_rect1)
+            screen.blit(self.text2,
+                        (self.game.width / 2, 2*self.game.height / 2))
             screen.blit(self.quit1, self.quit_rect1)
         else:
             screen.blit(self.start1, self.start_rect1)
+            screen.blit(self.text1,
+                        (self.game.width / 2, 2*self.game.height / 2))
             screen.blit(self.quit2, self.quit_rect2)
 
         for event in pygame.event.get():
@@ -74,8 +87,10 @@ class StartMenu:
                 if event.key == pygame.K_RETURN:
                     if self.selected == 0:
                         self.game.is_playing = True
-                        pygame.mixer.music.stop()
+                        self.start_music.stop()
                         self.game.new_game()
+                    elif self.selected == 1:
+                        self.game.in_options = True
                     else:
                         pygame.quit()
                         sys.exit()
@@ -83,12 +98,12 @@ class StartMenu:
                     if self.selected == 0:
                         self.selected = 1
                     else:
-                        break
+                        self.selected = 2
                 elif event.key == pygame.K_LEFT:
-                    if self.selected == 1:
-                        self.selected = 0
+                    if self.selected == 2:
+                        self.selected = 1
                     else:
-                        break
+                        self.selected = 0
             elif event.type == self.game.SONG_END:
                 self.start_music.play(-1)
 

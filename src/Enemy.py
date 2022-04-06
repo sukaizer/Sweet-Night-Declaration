@@ -3,22 +3,19 @@ import random
 import numpy as np
 from EnemyBullet import *
 from EnemyBulletPattern import *
+from Emitter import *
 
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Emitter):
     """Class representing all enemies"""
 
     def __init__(self, game, fun, **kwargs):
         """Class constructor"""
 
-        super().__init__()
+        super().__init__(game, fun, **kwargs)
         self.game = game
         self.health = 30
         self.max_health = 30
-        self.image = pygame.image.load("../assets/bullet.png").convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
         self.fun = fun
         self.args = kwargs
 
@@ -29,6 +26,11 @@ class Enemy(pygame.sprite.Sprite):
     def remove(self):
         """removes the current enemy from the group"""
         self.game.all_enemies.remove(self)
+        super().remove()
+
+    def add(self):
+        self.game.all_enemies.add(self)
+        super().add()
 
     def set_move(self, vx, vy, velocity):
         self.vx = vx
@@ -37,13 +39,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def damage(self, amount):
         # the sound is very loud !
-        self.game.hitSound.play()
+        self.game.hit_sound.play()
         self.health -= amount
         if self.health <= 0:
             self.remove()
-
-    def create_bullet(self, asset, fun, **kwargs):
-        """when giving parametric equation, you need a named argument called time,
-        for the other, you can give any number of them you want as long as you give them a name"""
-        self.game.all_enemy_bullets.add(
-            EnemyBullet(self.game, asset, fun, **kwargs))

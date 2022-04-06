@@ -16,11 +16,8 @@ class EnemyBullet(pygame.sprite.Sprite):
         self.args = kwargs
 
     def move(self):
-        self.args["time"] += 0.1
+        self.args["time"] += 1
         self.rect.x, self.rect.y = self.fun(**self.args)
-        
-
-
 
     def remove(self):
         self.game.all_enemy_bullets.remove(self)

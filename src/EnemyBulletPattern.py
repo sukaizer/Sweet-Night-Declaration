@@ -102,7 +102,7 @@ def bulletPattern0():
 
 aa = [300, 350, 250, 300, 350, 250]
 bb = [100, 200, 300, 400, 500, 600]
-tt = [0, 5, 10, 15, 20, 25]
+tt = [0, 50, 100, 150, 200, 250]
 
 
 def shift_table(tab, r):
@@ -127,4 +127,4 @@ def bulletpattern_circle(stage, enemy, v, qtt, asset):
 
 def bulletpattern_curve(enemy, asset):
     enemy.create_bullet(asset, lagcurve_gen, x=shift_table(
-        aa, 250), y=bb, t=tt, time=0)
+        aa, 600), y=bb, t=tt, time=0)
