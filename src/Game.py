@@ -52,23 +52,14 @@ class Game:
 
         # Variables animation sprite joueur
 
-        self.left = False
-        self.right = False
+        self.player.init_movement()
         self.walkCount = 0
         self.number_frames = 10  # an animation every X frames
 
-        self.sound_volume = 1
-        self.music_volume = 1
-        self.bullet_sound = Sound(
-            '../assets/sound/attack.wav', self.sound_volume)
-        self.hit_sound = Sound(
-            '../assets/sound/damage.wav', self.sound_volume)
-        self.debut_music = Music(
-            debut_music, self.music_volume)
-        self.loop_music = Music(
-            loop_music, self.music_volume)
-        self.SONG_END = pygame.USEREVENT + 1  # end of music event
-        self.song_played = False
+        self.init_sounds()
+
+        # self.font = "Herculanum"
+        self.font = "../assets/fonts/font0.ttf"
 
         self.pause = pygame.image.load(
             '../assets/title/pause.png').convert_alpha()
@@ -77,15 +68,45 @@ class Game:
         self.pause_rect.y = self.height / 2 - self.pause_rect.height / 2
         self.is_paused = False
 
+    def init_sounds(self):
+        """initializes sounds and musics variables"""
+        self.sound_volume = 1
+        self.music_volume = 1
+
+        self.bullet_sound = Sound(
+            '../assets/sound/attack.wav', self.sound_volume)
+        self.hit_sound = Sound(
+            '../assets/sound/damage.wav', self.sound_volume)
+        self.menu_sound = Sound(
+            '../assets/sound/menu.wav', self.sound_volume)
+        self.pause_sound = Sound(
+            '../assets/sound/pause.wav', self.sound_volume)
+
+        self.debut_music = Music(
+            debut_music, self.music_volume)
+        self.loop_music = Music(
+            loop_music, self.music_volume)
+        self.end_music = Music(
+            '../assets/music/deathscreenv2.ogg', self.music_volume)
+        self.start_music = Music(
+            '../assets/music/menumusicstart.ogg', self.music_volume)
+
+        self.sounds = [self.bullet_sound, self.hit_sound,
+                       self.menu_sound, self.pause_sound]
+        self.musics = [self.debut_music, self.loop_music,
+                       self.end_music, self.start_music]
+
+        self.SONG_END = pygame.USEREVENT + 1  # end of music event
+        self.song_played = False
+
     def main_loop(self, screen):
         """main loop of events"""
         pygame_event = pygame.event.get()
 
         self.exited_screen()
-        self.draw_pause_screen(screen)
 
         # Animation sprite player
-        self.draw_player(screen)
+        self.player.draw(screen)
         # drawing of objects
         self.all_enemies.draw(screen)
         self.player.all_bullets.draw(screen)
@@ -102,6 +123,8 @@ class Game:
         self.update_player(pygame_event)
 
         self.remove_bullet_collision()
+
+        self.draw_pause_screen(screen)
 
         # looping song (needs fix)
         self.loop_song(pygame_event)
@@ -142,62 +165,38 @@ class Game:
                 pygame.K_UP):
             if self.player.rect.x + self.player.rect.width * 1.2 < self.real_width and self.player.rect.y > 0:
                 self.player.move_upright()
-                self.left = False
-                self.right = True
             elif self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
                 self.player.move_right()
-                self.left = False
-                self.right = True
             elif self.player.rect.y > 0:
                 self.player.move_up()
-                self.left = False
-                self.right = False
 
         elif not self.is_paused and self.pressed.get(pygame.K_RIGHT) and self.pressed.get(
                 pygame.K_DOWN):
             if self.player.rect.x + self.player.rect.width * 1.2 < self.real_width and \
                     self.player.rect.y + self.player.rect.height < self.height:
                 self.player.move_downright()
-                self.left = False
-                self.right = True
             elif self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
                 self.player.move_right()
-                self.left = False
-                self.right = True
             elif self.player.rect.y + self.player.rect.height < self.height:
                 self.player.move_down()
-                self.left = False
-                self.right = False
 
         elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and self.pressed.get(
                 pygame.K_UP):
             if self.player.rect.x > 0 and self.player.rect.y > 0:
                 self.player.move_upleft()
-                self.left = True
-                self.right = False
             elif self.player.rect.x > 0:
                 self.player.move_left()
-                self.left = True
-                self.right = False
             elif self.player.rect.y > 0:
                 self.player.move_up()
-                self.left = False
-                self.right = False
 
         elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and self.pressed.get(
                 pygame.K_DOWN):
             if self.player.rect.x > 0 and self.player.rect.y + self.player.rect.height < self.height:
                 self.player.move_downleft()
-                self.left = True
-                self.right = False
             elif self.player.rect.x > 0:
                 self.player.move_left()
-                self.left = True
-                self.right = False
             elif self.player.rect.y + self.player.rect.height < self.height:
                 self.player.move_down()
-                self.left = False
-                self.right = False
 
         # update the position of the player when inputs detected
         elif not self.is_paused and self.pressed.get(pygame.K_RIGHT) and not self.pressed.get(
@@ -205,18 +204,13 @@ class Game:
                 pygame.K_UP) and not self.pressed.get(
                 pygame.K_DOWN) and self.player.rect.x + self.player.rect.width * 1.2 < self.real_width:
             self.player.move_right()
-            self.left = False
-            self.right = True
         elif not self.is_paused and self.pressed.get(pygame.K_LEFT) and not self.pressed.get(
             pygame.K_RIGHT) and not self.pressed.get(
                 pygame.K_UP) and not self.pressed.get(
                 pygame.K_DOWN) and self.player.rect.x > 0:
             self.player.move_left()
-            self.left = True
-            self.right = False
         else:
-            self.left = False
-            self.right = False
+            self.player.init_movement()
         if not self.is_paused and self.pressed.get(pygame.K_UP) and not self.pressed.get(
             pygame.K_DOWN) and not self.pressed.get(
                 pygame.K_LEFT) and not self.pressed.get(
@@ -228,8 +222,12 @@ class Game:
                 pygame.K_RIGHT) and self.player.rect.y + self.player.rect.height < self.height:
             self.player.move_down()
         if not self.is_paused and self.pressed.get(pygame.K_x) and self.player.time_bomb > self.wait_bomb_time:
-            # print(self.player.time_bomb)
-            self.player.time_bomb = 0
+            print(self.player.time_bomb)
+            if self.player.use_bomb():
+                self.player.time_bomb = 0
+                self.all_emitters.empty()
+                self.all_enemies.empty()
+                self.all_enemy_bullets.empty()
 
         # player shoot if shoot is not on cooldown
         if not self.is_paused and self.pressed.get(pygame.K_SPACE) and self.player.time_bullet > self.wait_bullet_time:
@@ -249,6 +247,7 @@ class Game:
                     self.player.slow_player()
                     self.is_slow = True
                 if not self.is_paused and event.key == pygame.K_ESCAPE:
+                    self.pause_sound.play()
                     self.is_paused = True
                 elif self.is_paused and event.key == pygame.K_ESCAPE:
                     self.is_paused = False
@@ -276,43 +275,6 @@ class Game:
 
         if not self.is_paused:
             self.time_collision += 1
-
-    def draw_player(self, screen):
-        """draws the player's sprite and animates it"""
-        if self.is_immune:
-            if self.immune_count % 2 == 0:
-                if self.left:
-                    screen.blit(
-                        self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
-                    self.walkCount += 1
-                elif self.right:
-                    screen.blit(
-                        self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
-                    self.walkCount += 1
-                else:
-                    screen.blit(
-                        self.player.standing[self.walkCount // self.number_frames], self.player.rect)
-                    self.walkCount += 1
-        else:
-            if self.left:
-                screen.blit(
-                    self.player.walkLeft[self.walkCount // self.number_frames], self.player.rect)
-                self.walkCount += 1
-            elif self.right:
-                screen.blit(
-                    self.player.walkRight[self.walkCount // self.number_frames], self.player.rect)
-                self.walkCount += 1
-            else:
-                screen.blit(
-                    self.player.standing[self.walkCount // self.number_frames], self.player.rect)
-                self.walkCount += 1
-
-        if self.is_slow:
-            pygame.draw.circle(screen, (0, 255, 0, 0.1), (
-                self.player.rect.x + self.player.rect.width // 2, self.player.rect.y + self.player.rect.height // 2),
-                self.player.hitbox + 7)
-        if self.walkCount >= self.number_frames * len(self.player.walkLeft):
-            self.walkCount = 0
 
     def closing_detection(self, pygame_event):
         """closing window detection"""
@@ -402,16 +364,13 @@ class Game:
         self.wait_collision_time = self.time_collision
         self.is_immune = False
         self.immune_count = 0
-        # movement is not set
-        self.left = False
-        self.right = False
 
+        self.init_sounds()
+
+        # movement is not set
+        self.player.init_movement()
         self.walkCount = 0
-        self.number_frames = 10  # an animation every X frames
-        self.bullet_sound = Sound(
-            '../assets/sound/attack.wav', self.sound_volume)
-        self.hit_sound = Sound(
-            '../assets/sound/damage.wav', self.sound_volume)
+        self.number_frames = self.number_frames  # an animation every X frames
         self.is_slow = False
 
     def update(self, screen):
@@ -420,6 +379,8 @@ class Game:
         self.main_loop(screen)  # update everything on screen
 
     def update_volume(self):
-        pygame.mixer.music.set_volume(self.music_volume)
-        self.bullet_sound.set_volume(self.sound_volume)
-        self.hit_sound.set_volume(self.sound_volume)
+        for sound in self.sounds:
+            sound.set_volume(self.sound_volume)
+
+        for music in self.musics:
+            music.set_volume(self.music_volume)

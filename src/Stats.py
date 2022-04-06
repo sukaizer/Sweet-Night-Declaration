@@ -63,5 +63,5 @@ class Stats:
         elif self.player.nb_bomb == 2:
             screen.blit(self.bomb, self.bomb1)
             screen.blit(self.bomb, self.bomb2)
-        else:
+        elif self.player.nb_bomb == 1:
             screen.blit(self.bomb, self.bomb1)

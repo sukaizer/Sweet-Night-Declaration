@@ -1,3 +1,4 @@
+from operator import truediv
 import pygame
 from Game import *
 from PlayerBullet import *
@@ -23,6 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.width // 25  # rayon
         self.time_bullet = 0
         self.time_bomb = 200
+        self.left = False
+        self.right = False
 
     def import_assets(self):
         """import all assets"""
@@ -80,41 +83,53 @@ class Player(pygame.sprite.Sprite):
         """Up Right movement"""
         self.rect.x += self.velocity * 0.7
         self.rect.y -= self.velocity * 0.7
+        self.left = False
+        self.right = True
 
     def move_upleft(self):
         """Up Left movement"""
         self.rect.x -= self.velocity * 0.7
         self.rect.y -= self.velocity * 0.7
+        self.left = True
+        self.right = False
 
     def move_downright(self):
         """Down Right movement"""
         self.rect.x += self.velocity * 0.7
         self.rect.y += self.velocity * 0.7
+        self.left = False
+        self.right = True
 
     def move_downleft(self):
         """Down Left movement"""
         self.rect.x -= self.velocity * 0.7
         self.rect.y += self.velocity * 0.7
+        self.left = True
+        self.right = False
 
     def move_right(self):
         """Right movement"""
-
         self.rect.x += self.velocity
+        self.left = False
+        self.right = True
 
     def move_left(self):
         """Left movement"""
-
         self.rect.x -= self.velocity
+        self.left = True
+        self.right = False
 
     def move_up(self):
         """Up movement"""
-
         self.rect.y -= self.velocity
+        self.left = False
+        self.right = False
 
     def move_down(self):
         """Down movement"""
-
         self.rect.y += self.velocity
+        self.left = False
+        self.right = False
 
     def slow_player(self):
         """Slows the player by modifing velocity"""
@@ -141,7 +156,51 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.game.height / 2
 
     def use_bomb(self):
-        self.nb_bomb -= 1 if self.nb_bomb > 0 else self.nb_bomb
+        if self.nb_bomb > 0:
+            self.nb_bomb -= 1
+            return True
+        return False
 
     def get_bomb(self):
         return self.nb_bomb
+
+    def draw(self, screen):
+        """draws the player's sprite and animates it"""
+        if self.game.is_immune:
+            if self.game.immune_count % 2 == 0:
+                if self.left:
+                    screen.blit(
+                        self.walkLeft[self.game.walkCount // self.game.number_frames], self.rect)
+                    self.game.walkCount += 1
+                elif self.right:
+                    screen.blit(
+                        self.walkRight[self.game.walkCount // self.game.number_frames], self.rect)
+                    self.game.walkCount += 1
+                else:
+                    screen.blit(
+                        self.standing[self.game.walkCount // self.game.number_frames], self.rect)
+                    self.game.walkCount += 1
+        else:
+            if self.left:
+                screen.blit(
+                    self.walkLeft[self.game.walkCount // self.game.number_frames], self.rect)
+                self.game.walkCount += 1
+            elif self.right:
+                screen.blit(
+                    self.walkRight[self.game.walkCount // self.game.number_frames], self.rect)
+                self.game.walkCount += 1
+            else:
+                screen.blit(
+                    self.standing[self.game.walkCount // self.game.number_frames], self.rect)
+                self.game.walkCount += 1
+
+        if self.game.is_slow:
+            pygame.draw.circle(screen, (0, 255, 0, 0.1), (
+                self.rect.x + self.rect.width // 2, self.rect.y + self.rect.height // 2),
+                self.hitbox + 7)
+        if self.game.walkCount >= self.game.number_frames * len(self.walkLeft):
+            self.game.walkCount = 0
+
+    def init_movement(self):
+        self.left = False
+        self.right = False

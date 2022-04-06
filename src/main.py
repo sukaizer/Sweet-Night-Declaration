@@ -1,9 +1,9 @@
 import sys
-from OptionsMenu import OptionsMenu
+from Menus.OptionsMenu import OptionsMenu
 import pygame
 from Game import *
-from StartMenu import *
-from EndMenu import *
+from Menus.StartMenu import *
+from Menus.EndMenu import *
 from Stages.StageScripts import *
 
 pygame.init()
@@ -26,9 +26,6 @@ background = pygame.image.load(
     '../assets/background/background.png').convert_alpha()
 background = pygame.transform.scale(background, (width, height))
 
-# TODO variable with current level instead of level01 right away
-# TODO variable with music volume and effects volume
-# TODO class for sounds (music and sound effects)
 
 # main loop
 while game.is_running:
