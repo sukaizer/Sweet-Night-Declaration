@@ -1,5 +1,5 @@
 # Sweet Night Declaration 
-#### Contributors (Bournet Raphael - Barzana Andgel - Ciorascu Alexandre )
+#### Contributors (Ciorascu Alexandre - Bournet Raphael - Barzana Andgel)
 
 Welcome to our danmaku game project ! 
 
