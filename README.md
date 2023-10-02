@@ -5,4 +5,4 @@ Welcome to our danmaku game project !
 
 **Language** : Python 
 
-[!til](snd_demo.gif)
+![til](snd_demo.gif)
